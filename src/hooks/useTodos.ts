@@ -1,6 +1,7 @@
-import { useReducer } from 'react'
+import { useEffect, useCallback, useReducer } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
 import type { DeletedItem, Todo, TodoAction, TodoState } from '../types/todo'
+import { storageAdapter } from '../db/database'
 
 const parseProject = (input: string): { project: string | null; task: string } => {
   const match = input.match(/^\s*([^:]+?)\s*:\s*(.+)$/)
@@ -23,38 +24,23 @@ const initialState: TodoState = {
 const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
   switch (action.type) {
     case 'ADD': {
-      const { project, task } = parseProject(action.task)
-      const newTodo: Todo = {
-        id: crypto.randomUUID(),
-        task,
-        project,
-        completed: false,
-        order: state.todos.length,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        completedAt: null,
-      }
-
       return {
-        todos: [...state.todos, newTodo],
+        todos: [...state.todos, action.todo],
+        deletedStack: [],
+      }
+    }
+
+    case 'LOAD': {
+      return {
+        todos: action.todos,
         deletedStack: [],
       }
     }
 
     case 'TOGGLE_COMPLETE': {
-      const todos = state.todos.map((todo) => {
-        if (todo.id !== action.id) {
-          return todo
-        }
-
-        const completed = !todo.completed
-        return {
-          ...todo,
-          completed,
-          completedAt: completed ? new Date() : null,
-          updatedAt: new Date(),
-        }
-      })
+      const todos = state.todos.map((todo) =>
+        todo.id === action.todo.id ? action.todo : todo
+      )
 
       return {
         ...state,
@@ -100,19 +86,9 @@ const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
     }
 
     case 'UPDATE_TASK': {
-      const { project, task } = parseProject(action.task)
-      const todos = state.todos.map((todo) => {
-        if (todo.id !== action.id) {
-          return todo
-        }
-
-        return {
-          ...todo,
-          project,
-          task,
-          updatedAt: new Date(),
-        }
-      })
+      const todos = state.todos.map((todo) =>
+        todo.id === action.todo.id ? action.todo : todo
+      )
 
       return {
         ...state,
@@ -121,23 +97,9 @@ const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
     }
 
     case 'REORDER': {
-      const sortedTodos = [...state.todos].sort((a, b) => a.order - b.order)
-      const activeIndex = sortedTodos.findIndex((todo) => todo.id === action.activeId)
-      const overIndex = sortedTodos.findIndex((todo) => todo.id === action.overId)
-
-      if (activeIndex === -1 || overIndex === -1) {
-        return state
-      }
-
-      const movedTodos = arrayMove(sortedTodos, activeIndex, overIndex)
-      const normalizedTodos = movedTodos.map((todo, idx) => ({
-        ...todo,
-        order: idx,
-      }))
-
       return {
         ...state,
-        todos: normalizedTodos,
+        todos: action.todos,
       }
     }
 
@@ -156,33 +118,104 @@ const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
 export const useTodos = () => {
   const [state, dispatch] = useReducer(todoReducer, initialState)
 
-  const addTodo = (task: string) => {
-    dispatch({ type: 'ADD', task })
-  }
+  useEffect(() => {
+    void (async () => {
+      const todos = await storageAdapter.getAll()
+      dispatch({ type: 'LOAD', todos })
+    })()
+  }, [])
 
-  const toggleComplete = (id: string) => {
-    dispatch({ type: 'TOGGLE_COMPLETE', id })
-  }
+  const addTodo = useCallback(async (task: string) => {
+    const { project, task: parsedTask } = parseProject(task)
+    const newTodo: Todo = {
+      id: crypto.randomUUID(),
+      task: parsedTask,
+      project,
+      completed: false,
+      order: state.todos.length,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      completedAt: null,
+    }
 
-  const deleteTodo = (id: string) => {
+    await storageAdapter.add(newTodo)
+    dispatch({ type: 'ADD', todo: newTodo })
+  }, [state.todos.length])
+
+  const toggleComplete = useCallback(async (id: string) => {
+    const todo = state.todos.find((item) => item.id === id)
+    if (!todo) {
+      return
+    }
+
+    const updatedTodo: Todo = {
+      ...todo,
+      completed: !todo.completed,
+      completedAt: !todo.completed ? new Date() : null,
+      updatedAt: new Date(),
+    }
+
+    dispatch({ type: 'TOGGLE_COMPLETE', todo: updatedTodo })
+    await storageAdapter.update(updatedTodo)
+  }, [state.todos])
+
+  const deleteTodo = useCallback(async (id: string) => {
     dispatch({ type: 'DELETE', id })
-  }
+    await storageAdapter.remove(id)
+  }, [])
 
-  const undoDelete = () => {
+  const undoDelete = useCallback(async () => {
+    if (state.deletedStack.length === 0) {
+      return
+    }
+
+    const { item } = state.deletedStack[0]
+    await storageAdapter.add(item)
     dispatch({ type: 'UNDO_DELETE' })
-  }
+  }, [state.deletedStack])
 
-  const updateTask = (id: string, task: string) => {
-    dispatch({ type: 'UPDATE_TASK', id, task })
-  }
+  const updateTask = useCallback(async (id: string, task: string) => {
+    const todo = state.todos.find((item) => item.id === id)
+    if (!todo) {
+      return
+    }
 
-  const reorder = (activeId: string, overId: string) => {
-    dispatch({ type: 'REORDER', activeId, overId })
-  }
+    const { project, task: parsedTask } = parseProject(task)
+    const updatedTodo: Todo = {
+      ...todo,
+      task: parsedTask,
+      project,
+      updatedAt: new Date(),
+    }
 
-  const clearCompleted = () => {
+    dispatch({ type: 'UPDATE_TASK', todo: updatedTodo })
+    await storageAdapter.update(updatedTodo)
+  }, [state.todos])
+
+  const reorder = useCallback(async (activeId: string, overId: string) => {
+    const sortedTodos = [...state.todos].sort((a, b) => a.order - b.order)
+    const activeIndex = sortedTodos.findIndex((todo) => todo.id === activeId)
+    const overIndex = sortedTodos.findIndex((todo) => todo.id === overId)
+
+    if (activeIndex === -1 || overIndex === -1) {
+      return
+    }
+
+    const movedTodos = arrayMove(sortedTodos, activeIndex, overIndex)
+    const normalizedTodos = movedTodos.map((todo, idx) => ({
+      ...todo,
+      order: idx,
+    }))
+
+    dispatch({ type: 'REORDER', todos: normalizedTodos })
+    await storageAdapter.bulkUpdate(normalizedTodos)
+  }, [state.todos])
+
+  const clearCompleted = useCallback(async () => {
+    const completedIds = state.todos.filter((todo) => todo.completed).map((todo) => todo.id)
     dispatch({ type: 'CLEAR_COMPLETED' })
-  }
+    await Promise.all(completedIds.map((id) => storageAdapter.remove(id)))
+  }, [state.todos])
 
   return {
     todos: state.todos,

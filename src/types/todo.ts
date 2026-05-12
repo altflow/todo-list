@@ -15,12 +15,13 @@ export type DeletedItem = {
 }
 
 export type TodoAction =
-  | { type: 'ADD'; task: string }
-  | { type: 'TOGGLE_COMPLETE'; id: string }
+  | { type: 'ADD'; todo: Todo }
+  | { type: 'LOAD'; todos: Todo[] }
+  | { type: 'TOGGLE_COMPLETE'; todo: Todo }
   | { type: 'DELETE'; id: string }
   | { type: 'UNDO_DELETE' }
-  | { type: 'UPDATE_TASK'; id: string; task: string }
-  | { type: 'REORDER'; activeId: string; overId: string }
+  | { type: 'UPDATE_TASK'; todo: Todo }
+  | { type: 'REORDER'; todos: Todo[] }
   | { type: 'CLEAR_COMPLETED' }
 
 export type TodoState = {
