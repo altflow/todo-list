@@ -1,20 +1,8 @@
 import { useEffect, useCallback, useReducer } from 'react'
-import { arrayMove } from '@dnd-kit/sortable'
 import type { DeletedItem, Todo, TodoAction, TodoState } from '../types/todo'
 import { storageAdapter } from '../db/database'
+import { createTodo, parseProject, reorderTodos } from '../utils/todoLogic'
 
-const parseProject = (input: string): { project: string | null; task: string } => {
-  const match = input.match(/^\s*([^:]+?)\s*:\s*(.+)$/)
-
-  if (!match) {
-    return { project: null, task: input }
-  }
-
-  return {
-    project: match[1].trim(),
-    task: match[2].trim(),
-  }
-}
 
 const initialState: TodoState = {
   todos: [],
@@ -126,17 +114,7 @@ export const useTodos = () => {
   }, [])
 
   const addTodo = useCallback(async (task: string) => {
-    const { project, task: parsedTask } = parseProject(task)
-    const newTodo: Todo = {
-      id: crypto.randomUUID(),
-      task: parsedTask,
-      project,
-      completed: false,
-      order: state.todos.length,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      completedAt: null,
-    }
+    const newTodo = createTodo(task, state.todos.length)
 
     await storageAdapter.add(newTodo)
     dispatch({ type: 'ADD', todo: newTodo })
@@ -193,19 +171,7 @@ export const useTodos = () => {
   }, [state.todos])
 
   const reorder = useCallback(async (activeId: string, overId: string) => {
-    const sortedTodos = [...state.todos].sort((a, b) => a.order - b.order)
-    const activeIndex = sortedTodos.findIndex((todo) => todo.id === activeId)
-    const overIndex = sortedTodos.findIndex((todo) => todo.id === overId)
-
-    if (activeIndex === -1 || overIndex === -1) {
-      return
-    }
-
-    const movedTodos = arrayMove(sortedTodos, activeIndex, overIndex)
-    const normalizedTodos = movedTodos.map((todo, idx) => ({
-      ...todo,
-      order: idx,
-    }))
+    const normalizedTodos = reorderTodos(state.todos, activeId, overId)
 
     dispatch({ type: 'REORDER', todos: normalizedTodos })
     await storageAdapter.bulkUpdate(normalizedTodos)
