@@ -2,7 +2,13 @@ import { arrayMove } from '@dnd-kit/sortable'
 import type { Todo } from '../types/todo'
 
 export function parseProject(input: string): { project: string | null; task: string } {
-  const match = input.match(/^\s*([^:]+?)\s*:\s*(.+)$/)
+  const trimmedInput = input.trim()
+
+  if (/^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(trimmedInput)) {
+    return { project: null, task: input }
+  }
+
+  const match = trimmedInput.match(/^([^:]+?)\s*:\s*(.+)$/)
 
   if (!match) {
     return { project: null, task: input }

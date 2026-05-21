@@ -9,7 +9,7 @@ const initialState: TodoState = {
   deletedStack: [],
 }
 
-const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
+export const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
   switch (action.type) {
     case 'ADD': {
       return {
