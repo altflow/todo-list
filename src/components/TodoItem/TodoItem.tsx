@@ -16,7 +16,13 @@ export function TodoItem({
   onUpdateTask,
 }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false)
-  const [editValue, setEditValue] = useState(todo.task)
+  const [editValue, setEditValue] = useState(
+    todo.project ? `${todo.project}: ${todo.task}` : todo.task
+  )
+
+  const displayTask = todo.project
+    ? `${todo.project}: ${todo.task}`
+    : todo.task
 
   const handleSave = () => {
     if (editValue.trim() === '') return
@@ -26,6 +32,13 @@ export function TodoItem({
 
   const handleCancel = () => {
     setIsEditing(false)
+  }
+
+  const handleEdit = () => {
+    setEditValue(
+      todo.project ? `${todo.project}: ${todo.task}` : todo.task
+    )
+    setIsEditing(true)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -68,12 +81,9 @@ export function TodoItem({
           todo.completed ? styles.completedTask : styles.task
         }
       >
-        {todo.task}
+        {displayTask}
       </span>
-      <button
-        onClick={() => setIsEditing(true)}
-        className={styles.editBtn}
-      >
+      <button onClick={handleEdit} className={styles.editBtn}>
         編集
       </button>
       <button onClick={() => onDelete(todo.id)} className={styles.deleteBtn}>

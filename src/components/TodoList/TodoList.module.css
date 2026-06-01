@@ -1,0 +1,35 @@
+.container {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.section {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.heading {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.emptyText {
+  margin: 0;
+  color: #666666;
+}
+
+.clearButton {
+  margin-top: 1rem;
+  padding: 0.6rem 0.9rem;
+  border: none;
+  border-radius: 6px;
+  background: #ef5350;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.clearButton:hover {
+  background: #d32f2f;
+}

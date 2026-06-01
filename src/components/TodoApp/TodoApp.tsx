@@ -2,12 +2,13 @@ import { useState } from 'react'
 import { useTodos } from '../../hooks/useTodos'
 import styles from './TodoApp.module.css'
 import { TodoInput } from '../TodoInput/TodoInput.tsx'
+import { TodoList } from '../TodoList/TodoList'
 
 type Tab = 'todo' | 'report'
 
 export const TodoApp = () => {
   const [activeTab, setActiveTab] = useState<Tab>('todo')
-  const { addTodo } = useTodos()
+  const { todos, addTodo, toggleComplete, deleteTodo, updateTask, clearCompleted } = useTodos()
 
   return (
     <div className={styles.app}>
@@ -26,7 +27,13 @@ export const TodoApp = () => {
         {activeTab === 'todo' && (
           <>
             <TodoInput onAdd={addTodo} />
-            <p>TodoList here</p>
+            <TodoList
+              todos={todos}
+              onToggleComplete={toggleComplete}
+              onDelete={deleteTodo}
+              onUpdateTask={updateTask}
+              onClearCompleted={clearCompleted}
+            />
             <p>UndoToast here</p>
           </>
         )}
