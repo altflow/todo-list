@@ -88,10 +88,10 @@ describe('todoReducer', () => {
   })
 
   describe('DELETE', () => {
-    it('removes a todo and pushes it onto deletedStack', () => {
+    it('removes a todo and keeps only the latest deleted item in deletedStack', () => {
       const state: TodoState = {
         todos: [mockTodo],
-        deletedStack: [],
+        deletedStack: [{ item: { ...mockTodo, id: 'previous-id' }, index: 0 }],
       }
 
       const nextState = todoReducer(state, { type: 'DELETE', id: mockTodo.id })
@@ -109,6 +109,32 @@ describe('todoReducer', () => {
       const nextState = todoReducer(state, { type: 'DELETE', id: 'missing-id' })
 
       expect(nextState).toBe(state)
+    })
+  })
+
+  describe('DISMISS_DELETE', () => {
+    it('clears deletedStack and leaves todos unchanged', () => {
+      const state: TodoState = {
+        todos: [mockTodo],
+        deletedStack: [{ item: mockTodo, index: 0 }],
+      }
+
+      const nextState = todoReducer(state, { type: 'DISMISS_DELETE' })
+
+      expect(nextState.todos).toEqual(state.todos)
+      expect(nextState.deletedStack).toEqual([])
+    })
+
+    it('does not change todos when deletedStack is already empty', () => {
+      const state: TodoState = {
+        todos: [mockTodo],
+        deletedStack: [],
+      }
+
+      const nextState = todoReducer(state, { type: 'DISMISS_DELETE' })
+
+      expect(nextState.todos).toEqual(state.todos)
+      expect(nextState.deletedStack).toEqual([])
     })
   })
 

@@ -44,7 +44,7 @@ export const todoReducer = (state: TodoState, action: TodoAction): TodoState => 
 
       const item = state.todos[index]
       const todos = state.todos.filter((todo) => todo.id !== action.id)
-      const deletedStack: DeletedItem[] = [{ item, index }, ...state.deletedStack]
+      const deletedStack: DeletedItem[] = [{ item, index }]
 
       return {
         todos,
@@ -57,7 +57,7 @@ export const todoReducer = (state: TodoState, action: TodoAction): TodoState => 
         return state
       }
 
-      const [restored, ...rest] = state.deletedStack
+      const [restored] = state.deletedStack
       const todos = [...state.todos]
       const insertIndex = Math.min(Math.max(restored.index, 0), todos.length)
       todos.splice(insertIndex, 0, restored.item)
@@ -69,7 +69,14 @@ export const todoReducer = (state: TodoState, action: TodoAction): TodoState => 
 
       return {
         todos: normalizedTodos,
-        deletedStack: rest,
+        deletedStack: [],
+      }
+    }
+
+    case 'DISMISS_DELETE': {
+      return {
+        ...state,
+        deletedStack: [],
       }
     }
 
@@ -152,6 +159,14 @@ export const useTodos = () => {
     dispatch({ type: 'UNDO_DELETE' })
   }, [state.deletedStack])
 
+  const dismissDelete = useCallback(() => {
+    if (state.deletedStack.length === 0) {
+      return
+    }
+
+    dispatch({ type: 'DISMISS_DELETE' })
+  }, [state.deletedStack])
+
   const updateTask = useCallback(async (id: string, task: string) => {
     const todo = state.todos.find((item) => item.id === id)
     if (!todo) {
@@ -190,6 +205,7 @@ export const useTodos = () => {
     toggleComplete,
     deleteTodo,
     undoDelete,
+    dismissDelete,
     updateTask,
     reorder,
     clearCompleted,

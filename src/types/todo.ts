@@ -20,6 +20,7 @@ export type TodoAction =
   | { type: 'TOGGLE_COMPLETE'; todo: Todo }
   | { type: 'DELETE'; id: string }
   | { type: 'UNDO_DELETE' }
+  | { type: 'DISMISS_DELETE' }
   | { type: 'UPDATE_TASK'; todo: Todo }
   | { type: 'REORDER'; todos: Todo[] }
   | { type: 'CLEAR_COMPLETED' }
