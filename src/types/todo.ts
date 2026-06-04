@@ -9,6 +9,9 @@ export type Todo = {
   completedAt: Date | null
 }
 
+// 'all' | 'general' | 'project-name' (dynamically added)
+export type ProjectFilter = 'all' | 'general' | string
+
 export type DeletedItem = {
   item: Todo
   index: number

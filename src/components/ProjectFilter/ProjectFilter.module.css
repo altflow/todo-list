@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.label {
+  font-weight: 600;
+  color: #333333;
+}
+
+.filterList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filterButton {
+  border: 1px solid #d1d5db;
+  border-radius: 9999px;
+  background: #f9fafb;
+  color: #111827;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.filterButton:hover {
+  background: #eff2ff;
+}
+
+.active {
+  border-color: #4f46e5;
+  background: #eef2ff;
+  color: #3730a3;
+}

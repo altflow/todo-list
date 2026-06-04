@@ -1,9 +1,10 @@
-import type { Todo } from '../../types/todo'
+import type { ProjectFilter, Todo } from '../../types/todo'
 import { TodoItem } from '../TodoItem/TodoItem'
 import styles from './TodoList.module.css'
 
 interface TodoListProps {
   todos: Todo[]
+  selectedFilter: ProjectFilter
   onToggleComplete: (id: string) => void
   onDelete: (id: string) => void
   onUpdateTask: (id: string, task: string) => void
@@ -12,17 +13,28 @@ interface TodoListProps {
 
 export function TodoList({
   todos,
+  selectedFilter,
   onToggleComplete,
   onDelete,
   onUpdateTask,
   onClearCompleted,
 }: TodoListProps) {
+  const filterBySelectedFilter = (todo: Todo) => {
+    if (selectedFilter === 'all') {
+      return true
+    }
+    if (selectedFilter === 'general') {
+      return todo.project === null
+    }
+    return todo.project === selectedFilter
+  }
+
   const incompleteTodos = [...todos]
-    .filter((todo) => !todo.completed)
+    .filter((todo) => !todo.completed && filterBySelectedFilter(todo))
     .sort((a, b) => a.order - b.order)
 
   const completedTodos = [...todos]
-    .filter((todo) => todo.completed)
+    .filter((todo) => todo.completed && filterBySelectedFilter(todo))
     .sort((a, b) => {
       const aTime = a.completedAt?.getTime() ?? 0
       const bTime = b.completedAt?.getTime() ?? 0
