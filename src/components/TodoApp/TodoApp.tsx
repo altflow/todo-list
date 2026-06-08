@@ -21,6 +21,7 @@ export const TodoApp = () => {
     undoDelete,
     dismissDelete,
     updateTask,
+    reorder,
     clearCompleted,
   } = useTodos()
 
@@ -52,6 +53,7 @@ export const TodoApp = () => {
               onToggleComplete={toggleComplete}
               onDelete={deleteTodo}
               onUpdateTask={updateTask}
+              onReorder={reorder}
               onClearCompleted={clearCompleted}
             />
             <UndoToast deletedStack={deletedStack} onUndo={undoDelete} onClose={dismissDelete} />

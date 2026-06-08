@@ -1,3 +1,5 @@
+import { DndContext, closestCenter, type DragEndEvent } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import type { ProjectFilter, Todo } from '../../types/todo'
 import { TodoItem } from '../TodoItem/TodoItem'
 import styles from './TodoList.module.css'
@@ -8,6 +10,7 @@ interface TodoListProps {
   onToggleComplete: (id: string) => void
   onDelete: (id: string) => void
   onUpdateTask: (id: string, task: string) => void
+  onReorder: (activeId: string, overId: string) => void
   onClearCompleted: () => void
 }
 
@@ -17,6 +20,7 @@ export function TodoList({
   onToggleComplete,
   onDelete,
   onUpdateTask,
+  onReorder,
   onClearCompleted,
 }: TodoListProps) {
   const filterBySelectedFilter = (todo: Todo) => {
@@ -41,6 +45,17 @@ export function TodoList({
       return bTime - aTime
     })
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const activeId = event.active.id as string
+    const overId = event.over?.id as string
+
+    if (!overId || activeId === overId) {
+      return
+    }
+
+    onReorder(activeId, overId)
+  }
+
   return (
     <div className={styles.container}>
       <section className={styles.section}>
@@ -48,15 +63,22 @@ export function TodoList({
         {incompleteTodos.length === 0 ? (
           <p className={styles.emptyText}>タスクはありません</p>
         ) : (
-          incompleteTodos.map((todo) => (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              onToggleComplete={onToggleComplete}
-              onDelete={onDelete}
-              onUpdateTask={onUpdateTask}
-            />
-          ))
+          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext
+              items={incompleteTodos.map((todo) => todo.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {incompleteTodos.map((todo) => (
+                <TodoItem
+                  key={todo.id}
+                  todo={todo}
+                  onToggleComplete={onToggleComplete}
+                  onDelete={onDelete}
+                  onUpdateTask={onUpdateTask}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
         )}
       </section>
 
