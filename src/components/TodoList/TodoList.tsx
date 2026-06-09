@@ -38,7 +38,13 @@ export function TodoList({
     .sort((a, b) => a.order - b.order)
 
   const completedTodos = [...todos]
-    .filter((todo) => todo.completed && filterBySelectedFilter(todo))
+    .filter(
+      (todo) =>
+        todo.completed &&
+        todo.completedAt !== null &&
+        Date.now() - todo.completedAt.getTime() <= 24 * 60 * 60 * 1000 &&
+        filterBySelectedFilter(todo),
+    )
     .sort((a, b) => {
       const aTime = a.completedAt?.getTime() ?? 0
       const bTime = b.completedAt?.getTime() ?? 0
