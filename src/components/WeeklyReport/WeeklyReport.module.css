@@ -1,0 +1,71 @@
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.navButton {
+  background: #f4f4f4;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.weekLabel {
+  font-weight: 600;
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.group {
+  padding: 1rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.projectName {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.taskList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.taskItem {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.completedAt {
+  color: #666;
+  min-width: 3.5rem;
+}
+
+.taskName {
+  flex: 1;
+}
+
+.emptyMessage {
+  margin: 0;
+  color: #555;
+}

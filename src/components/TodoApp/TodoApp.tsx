@@ -6,6 +6,7 @@ import { TodoInput } from '../TodoInput/TodoInput.tsx'
 import { TodoList } from '../TodoList/TodoList'
 import { UndoToast } from '../UndoToast/UndoToast'
 import { ProjectFilter as ProjectFilterComponent } from '../ProjectFilter/ProjectFilter.tsx'
+import { WeeklyReport } from '../WeeklyReport/WeeklyReport'
 
 type Tab = 'todo' | 'report'
 
@@ -59,7 +60,7 @@ export const TodoApp = () => {
             <UndoToast deletedStack={deletedStack} onUndo={undoDelete} onClose={dismissDelete} />
           </>
         )}
-        {activeTab === 'report' && <p>WeeklyReport here</p>}
+        {activeTab === 'report' && <WeeklyReport todos={todos} />}
       </main>
     </div>
   )
