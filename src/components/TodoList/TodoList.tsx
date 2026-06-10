@@ -1,5 +1,6 @@
 import { DndContext, closestCenter, type DragEndEvent } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { useTranslation } from 'react-i18next'
 import type { ProjectFilter, Todo } from '../../types/todo'
 import { TodoItem } from '../TodoItem/TodoItem'
 import styles from './TodoList.module.css'
@@ -23,6 +24,7 @@ export function TodoList({
   onReorder,
   onClearCompleted,
 }: TodoListProps) {
+  const { t } = useTranslation()
   const filterBySelectedFilter = (todo: Todo) => {
     if (selectedFilter === 'all') {
       return true
@@ -65,9 +67,9 @@ export function TodoList({
   return (
     <div className={styles.container}>
       <section className={styles.section}>
-        <h2 className={styles.heading}>ToDo</h2>
+        <h2 className={styles.heading}>{t('todoList.todoHeading')}</h2>
         {incompleteTodos.length === 0 ? (
-          <p className={styles.emptyText}>タスクはありません</p>
+          <p className={styles.emptyText}>{t('todoList.emptyTodo')}</p>
         ) : (
           <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext
@@ -89,9 +91,9 @@ export function TodoList({
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.heading}>完了済み</h2>
+        <h2 className={styles.heading}>{t('todoList.completedHeading')}</h2>
         {completedTodos.length === 0 ? (
-          <p className={styles.emptyText}>完了済みのタスクはありません</p>
+          <p className={styles.emptyText}>{t('todoList.emptyCompleted')}</p>
         ) : (
           completedTodos.map((todo) => (
             <TodoItem
@@ -109,7 +111,7 @@ export function TodoList({
             className={styles.clearButton}
             onClick={onClearCompleted}
           >
-            完了済みを削除
+            {t('todoList.clearCompleted')}
           </button>
         )}
       </section>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { DeletedItem } from '../../types/todo'
 import styles from './UndoToast.module.css'
 
@@ -8,6 +9,8 @@ interface UndoToastProps {
 }
 
 export const UndoToast = ({ deletedStack, onUndo, onClose }: UndoToastProps) => {
+  const { t } = useTranslation()
+
   if (deletedStack.length === 0) {
     return null
   }
@@ -18,14 +21,14 @@ export const UndoToast = ({ deletedStack, onUndo, onClose }: UndoToastProps) => 
   return (
     <div className={styles.toast}>
       <span className={styles.message}>
-        &quot;{deletedLabel}&quot; を削除しました
+        {t('undoToast.message', { task: deletedLabel })}
       </span>
       <div className={styles.controls}>
         <button type="button" className={styles.undoButton} onClick={onUndo}>
-          元に戻す
+          {t('undoToast.undoButton')}
         </button>
         <button type="button" className={styles.closeButton} onClick={onClose}>
-          ×
+          {t('undoToast.closeButton')}
         </button>
       </div>
     </div>

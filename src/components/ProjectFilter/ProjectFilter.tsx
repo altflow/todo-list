@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Todo, ProjectFilter as ProjectFilterType } from '../../types/todo'
 import styles from './ProjectFilter.module.css'
 
@@ -14,6 +15,7 @@ export function ProjectFilter({
   selectedFilter,
   onFilterChange,
 }: ProjectFilterProps) {
+  const { t } = useTranslation()
   const projectNames = Array.from(
     new Set(todos.flatMap((todo) => (todo.project ? [todo.project] : [])))
   ).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
@@ -26,17 +28,17 @@ export function ProjectFilter({
 
   const getLabel = (filter: ProjectFilterType) => {
     if (filter === 'all') {
-      return 'すべて'
+      return t('projectFilter.all')
     }
     if (filter === 'general') {
-      return 'General'
+      return t('projectFilter.general')
     }
     return filter
   }
 
   return (
     <div className={styles.container}>
-      <span className={styles.label}>プロジェクト:</span>
+      <span className={styles.label}>{t('projectFilter.label')}</span>
       <div className={styles.filterList}>
         {filters.map((filter) => (
           <button

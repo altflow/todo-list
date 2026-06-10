@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Todo } from '../../types/todo'
 import { useWeeklyReport } from '../../hooks/useWeeklyReport'
 import styles from './WeeklyReport.module.css'
@@ -7,6 +8,7 @@ interface WeeklyReportProps {
 }
 
 export const WeeklyReport = ({ todos }: WeeklyReportProps) => {
+  const { t } = useTranslation()
   const { weekLabel, getWeeklyReport, prevWeek, nextWeek } = useWeeklyReport()
   const report = getWeeklyReport(todos)
 
@@ -23,7 +25,7 @@ export const WeeklyReport = ({ todos }: WeeklyReportProps) => {
       </div>
 
       {report.length === 0 ? (
-        <p className={styles.emptyMessage}>この週に完了したタスクはありません</p>
+        <p className={styles.emptyMessage}>{t('weeklyReport.emptyMessage')}</p>
       ) : (
         <div className={styles.groups}>
           {report.map((group) => (

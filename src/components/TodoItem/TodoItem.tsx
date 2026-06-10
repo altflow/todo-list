@@ -1,6 +1,7 @@
 import { useState, type KeyboardEvent } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { useTranslation } from 'react-i18next'
 import type { Todo } from '../../types/todo'
 import styles from './TodoItem.module.css'
 
@@ -18,6 +19,7 @@ function DraggableTodoItem({
   onEdit,
   displayTask,
 }: TodoItemProps & { displayTask: string; onEdit: () => void }) {
+  const { t } = useTranslation()
   const {
     attributes,
     listeners,
@@ -53,10 +55,10 @@ function DraggableTodoItem({
         {displayTask}
       </span>
       <button onClick={onEdit} className={styles.editBtn}>
-        編集
+        {t('todoItem.editButton')}
       </button>
       <button onClick={() => onDelete(todo.id)} className={styles.deleteBtn}>
-        削除
+        {t('todoItem.deleteButton')}
       </button>
     </div>
   )
@@ -68,6 +70,7 @@ export function TodoItem({
   onDelete,
   onUpdateTask,
 }: TodoItemProps) {
+  const { t } = useTranslation()
   const [isEditing, setIsEditing] = useState(false)
   const [editValue, setEditValue] = useState(
     todo.project ? `${todo.project}: ${todo.task}` : todo.task
@@ -112,10 +115,10 @@ export function TodoItem({
           autoFocus
         />
         <button onClick={handleSave} className={styles.saveBtn}>
-          保存
+          {t('todoItem.saveButton')}
         </button>
         <button onClick={handleCancel} className={styles.cancelBtn}>
-          キャンセル
+          {t('todoItem.cancelButton')}
         </button>
       </div>
     )
@@ -132,10 +135,10 @@ export function TodoItem({
         />
         <span className={styles.completedTask}>{displayTask}</span>
         <button onClick={handleEdit} className={styles.editBtn}>
-          編集
+          {t('todoItem.editButton')}
         </button>
         <button onClick={() => onDelete(todo.id)} className={styles.deleteBtn}>
-          削除
+          {t('todoItem.deleteButton')}
         </button>
       </div>
     )

@@ -1,0 +1,43 @@
+{
+  "app": {
+    "title": "ToDo List"
+  },
+  "tabs": {
+    "todo": "ToDo",
+    "report": "Report"
+  },
+  "todoInput": {
+    "placeholder": "Enter a task (e.g. ProjectName: task details)",
+    "addButton": "Add"
+  },
+  "todoItem": {
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "saveButton": "Save",
+    "cancelButton": "Cancel"
+  },
+  "todoList": {
+    "todoHeading": "ToDo",
+    "completedHeading": "Completed",
+    "emptyTodo": "No tasks",
+    "emptyCompleted": "No completed tasks",
+    "clearCompleted": "Clear completed"
+  },
+  "projectFilter": {
+    "label": "Project:",
+    "all": "All",
+    "general": "General"
+  },
+  "undoToast": {
+    "message": "Deleted \"{{task}}\"",
+    "undoButton": "Undo",
+    "closeButton": "×"
+  },
+  "weeklyReport": {
+    "emptyMessage": "No completed tasks this week"
+  },
+  "language": {
+    "ja": "日本語",
+    "en": "English"
+  }
+}

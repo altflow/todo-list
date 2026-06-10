@@ -1,0 +1,43 @@
+{
+  "app": {
+    "title": "ToDo List"
+  },
+  "tabs": {
+    "todo": "ToDo",
+    "report": "レポート"
+  },
+  "todoInput": {
+    "placeholder": "タスクを入力（例: ProjectName: タスク内容）",
+    "addButton": "追加"
+  },
+  "todoItem": {
+    "editButton": "編集",
+    "deleteButton": "削除",
+    "saveButton": "保存",
+    "cancelButton": "キャンセル"
+  },
+  "todoList": {
+    "todoHeading": "ToDo",
+    "completedHeading": "完了済み",
+    "emptyTodo": "タスクはありません",
+    "emptyCompleted": "完了済みのタスクはありません",
+    "clearCompleted": "完了済みを削除"
+  },
+  "projectFilter": {
+    "label": "プロジェクト:",
+    "all": "すべて",
+    "general": "General"
+  },
+  "undoToast": {
+    "message": "\"{{task}}\" を削除しました",
+    "undoButton": "元に戻す",
+    "closeButton": "×"
+  },
+  "weeklyReport": {
+    "emptyMessage": "この週に完了したタスクはありません"
+  },
+  "language": {
+    "ja": "日本語",
+    "en": "English"
+  }
+}

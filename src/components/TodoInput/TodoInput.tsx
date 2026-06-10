@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { ChangeEvent, SubmitEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from './TodoInput.module.css'
 
 interface TodoInputProps {
@@ -7,6 +8,7 @@ interface TodoInputProps {
 }
 
 export const TodoInput = ({ onAdd }: TodoInputProps) => {
+  const { t } = useTranslation()
   const [value, setValue] = useState('')
 
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
@@ -32,10 +34,10 @@ export const TodoInput = ({ onAdd }: TodoInputProps) => {
         type="text"
         value={value}
         onChange={handleChange}
-        placeholder="タスクを入力（例: ProjectName: タスク内容）"
+        placeholder={t('todoInput.placeholder')}
       />
       <button className={styles.button} type="submit">
-        追加
+        {t('todoInput.addButton')}
       </button>
     </form>
   )
