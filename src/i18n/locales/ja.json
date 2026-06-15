@@ -39,5 +39,12 @@
   "language": {
     "ja": "日本語",
     "en": "English"
+  },
+  "settings": {
+    "title": "設定",
+    "dataManagement": "データ管理",
+    "clearAllCompletedDescription": "完了済みのタスクをすべて削除します。この操作は取り消せません。",
+    "clearAllCompletedButton": "完了済みをすべて削除",
+    "clearAllCompletedConfirm": "完了済みのタスクをすべて削除しますか？この操作は取り消せません。"
   }
 }

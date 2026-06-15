@@ -39,5 +39,12 @@
   "language": {
     "ja": "日本語",
     "en": "English"
+  },
+  "settings": {
+    "title": "Settings",
+    "dataManagement": "Data Management",
+    "clearAllCompletedDescription": "Delete all completed tasks. This action cannot be undone.",
+    "clearAllCompletedButton": "Clear all completed",
+    "clearAllCompletedConfirm": "Delete all completed tasks? This action cannot be undone."
   }
 }

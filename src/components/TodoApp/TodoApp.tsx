@@ -8,8 +8,9 @@ import { TodoList } from '../TodoList/TodoList'
 import { UndoToast } from '../UndoToast/UndoToast'
 import { ProjectFilter as ProjectFilterComponent } from '../ProjectFilter/ProjectFilter.tsx'
 import { WeeklyReport } from '../WeeklyReport/WeeklyReport'
+import { Settings } from '../Settings/Settings'
 
-type Tab = 'todo' | 'report'
+type Tab = 'todo' | 'report' | 'settings'
 
 const languages = [
   { code: 'ja', label: '日本語' },
@@ -68,6 +69,9 @@ export const TodoApp = () => {
           <button type="button" onClick={() => setActiveTab('report')}>
             {t('tabs.report')}
           </button>
+          <button type="button" onClick={() => setActiveTab('settings')}>
+            {t('settings.title')}
+          </button>
           <div className={styles.languageMenu} ref={langMenuRef}>
             <button
               type="button"
@@ -116,6 +120,7 @@ export const TodoApp = () => {
           </>
         )}
         {activeTab === 'report' && <WeeklyReport todos={todos} />}
+        {activeTab === 'settings' && <Settings onClearAllCompleted={clearCompleted} />}
       </main>
     </div>
   )
