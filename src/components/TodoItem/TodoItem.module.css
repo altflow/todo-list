@@ -3,7 +3,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   margin-bottom: 8px;
 }
@@ -21,13 +21,13 @@
 .completedTask {
   flex: 1;
   text-decoration: line-through;
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 .editInput {
   flex: 1;
   padding: 4px 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 14px;
 }
@@ -38,10 +38,10 @@
 .cancelBtn,
 .dragHandle {
   padding: 4px 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   cursor: pointer;
-  background: #f5f5f5;
+  background: var(--color-bg-secondary);
   font-size: 14px;
   white-space: nowrap;
 }
@@ -54,12 +54,12 @@
 }
 
 .dragHandle:hover {
-  background: #e0e0e0;
+  background: var(--color-bg-tertiary);
 }
 
 .editBtn:hover,
 .deleteBtn:hover,
 .saveBtn:hover,
 .cancelBtn:hover {
-  background: #e0e0e0;
+  background: var(--color-bg-tertiary);
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ProjectFilter } from '../../types/todo'
 import { useTranslation } from 'react-i18next'
 import { useTodos } from '../../hooks/useTodos'
+import { useTheme, type Theme } from '../../hooks/useTheme'
 import styles from './TodoApp.module.css'
 import { TodoInput } from '../TodoInput/TodoInput.tsx'
 import { TodoList } from '../TodoList/TodoList'
@@ -21,8 +22,11 @@ export const TodoApp = () => {
   const [activeTab, setActiveTab] = useState<Tab>('todo')
   const [selectedFilter, setSelectedFilter] = useState<ProjectFilter>('all')
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false)
+  const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false)
   const langMenuRef = useRef<HTMLDivElement | null>(null)
+  const themeMenuRef = useRef<HTMLDivElement | null>(null)
   const { t, i18n } = useTranslation()
+  const { theme, setTheme } = useTheme()
   const {
     todos,
     deletedStack,
@@ -37,7 +41,7 @@ export const TodoApp = () => {
   } = useTodos()
 
   useEffect(() => {
-    if (!isLangMenuOpen) {
+    if (!isLangMenuOpen && !isThemeMenuOpen) {
       return undefined
     }
 
@@ -45,17 +49,26 @@ export const TodoApp = () => {
       if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
         setIsLangMenuOpen(false)
       }
+
+      if (themeMenuRef.current && !themeMenuRef.current.contains(event.target as Node)) {
+        setIsThemeMenuOpen(false)
+      }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isLangMenuOpen])
+  }, [isLangMenuOpen, isThemeMenuOpen])
 
   const handleLanguageSelect = (code: string) => {
     i18n.changeLanguage(code)
     setIsLangMenuOpen(false)
+  }
+
+  const handleThemeSelect = (selectedTheme: Theme) => {
+    setTheme(selectedTheme)
+    setIsThemeMenuOpen(false)
   }
 
   return (
@@ -91,6 +104,30 @@ export const TodoApp = () => {
                   >
                     {i18n.language === language.code ? '✓ ' : ''}
                     {language.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className={styles.themeMenu} ref={themeMenuRef}>
+            <button
+              type="button"
+              className={styles.themeTrigger}
+              onClick={() => setIsThemeMenuOpen((prev) => !prev)}
+            >
+              Theme
+            </button>
+            {isThemeMenuOpen && (
+              <div className={styles.themeDropdown}>
+                {(['light', 'dark', 'auto'] as Theme[]).map((option) => (
+                  <button
+                    key={option}
+                    type="button"
+                    className={styles.themeOption}
+                    onClick={() => handleThemeSelect(option)}
+                  >
+                    {theme === option ? '✓ ' : ''}
+                    {option === 'light' ? 'Light' : option === 'dark' ? 'Dark' : 'Auto'}
                   </button>
                 ))}
               </div>

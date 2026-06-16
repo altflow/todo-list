@@ -12,8 +12,8 @@
 }
 
 .navButton {
-  background: #f4f4f4;
-  border: 1px solid #dcdcdc;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 0.5rem 0.75rem;
   cursor: pointer;
@@ -31,9 +31,9 @@
 
 .group {
   padding: 1rem;
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--color-bg);
 }
 
 .projectName {
@@ -57,7 +57,7 @@
 }
 
 .completedAt {
-  color: #666;
+  color: var(--color-text-secondary);
   min-width: 3.5rem;
 }
 
@@ -67,5 +67,5 @@
 
 .emptyMessage {
   margin: 0;
-  color: #555;
+  color: var(--color-text-secondary);
 }
