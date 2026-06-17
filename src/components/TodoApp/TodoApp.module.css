@@ -18,6 +18,19 @@
   align-items: center;
 }
 
+.nav button {
+  color: var(--color-text-primary);
+  background: transparent;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.active {
+  font-weight: bold;
+  border-bottom: 2px solid var(--color-text-primary);
+}
+
 .languageMenu,
 .themeMenu {
   position: relative;

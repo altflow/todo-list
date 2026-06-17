@@ -24,12 +24,13 @@
   align-items: center;
   justify-content: center;
   padding: 10px 14px;
-  border: 1px solid var(--color-border);
+  border: none;
   border-radius: 6px;
-  background: var(--color-bg);
+  background: var(--color-danger);
+  color: #ffffff;
   cursor: pointer;
 }
 
 .clearButton:hover {
-  background: var(--color-bg-secondary);
+  background: var(--color-danger-hover);
 }

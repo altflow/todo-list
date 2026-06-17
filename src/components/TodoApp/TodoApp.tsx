@@ -76,13 +76,25 @@ export const TodoApp = () => {
       <header className={styles.header}>
         <h1>{t('app.title')}</h1>
         <nav className={styles.nav}>
-          <button type="button" onClick={() => setActiveTab('todo')}>
+          <button
+            type="button"
+            onClick={() => setActiveTab('todo')}
+            className={activeTab === 'todo' ? styles.active : undefined}
+          >
             {t('tabs.todo')}
           </button>
-          <button type="button" onClick={() => setActiveTab('report')}>
+          <button
+            type="button"
+            onClick={() => setActiveTab('report')}
+            className={activeTab === 'report' ? styles.active : undefined}
+          >
             {t('tabs.report')}
           </button>
-          <button type="button" onClick={() => setActiveTab('settings')}>
+          <button
+            type="button"
+            onClick={() => setActiveTab('settings')}
+            className={activeTab === 'settings' ? styles.active : undefined}
+          >
             {t('settings.title')}
           </button>
           <div className={styles.languageMenu} ref={langMenuRef}>

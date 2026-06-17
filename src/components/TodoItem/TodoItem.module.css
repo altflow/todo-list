@@ -38,12 +38,13 @@
 .cancelBtn,
 .dragHandle {
   padding: 4px 8px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-strong);
   border-radius: 4px;
   cursor: pointer;
   background: var(--color-bg-secondary);
   font-size: 14px;
   white-space: nowrap;
+  color: var(--color-text-primary);
 }
 
 .dragHandle {
@@ -51,6 +52,7 @@
   align-items: center;
   justify-content: center;
   min-width: 32px;
+  color: var(--color-text-primary);
 }
 
 .dragHandle:hover {
