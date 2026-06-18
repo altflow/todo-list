@@ -19,6 +19,10 @@ class DexieStorageAdapter implements StorageAdapter {
     return await db.todos.orderBy('order').toArray()
   }
 
+  async getCompletedByDateRange(start: Date, end: Date): Promise<Todo[]> {
+    return await db.todos.where('completedAt').between(start, end, true, true).toArray()
+  }
+
   async add(todo: Todo): Promise<void> {
     await db.todos.add(todo)
   }

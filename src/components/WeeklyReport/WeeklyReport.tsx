@@ -1,16 +1,11 @@
 import { useTranslation } from 'react-i18next'
-import type { Todo } from '../../types/todo'
 import { useWeeklyReport } from '../../hooks/useWeeklyReport'
 import styles from './WeeklyReport.module.css'
 
-interface WeeklyReportProps {
-  todos: Todo[]
-}
-
-export const WeeklyReport = ({ todos }: WeeklyReportProps) => {
+export const WeeklyReport = () => {
   const { t } = useTranslation()
-  const { weekLabel, getWeeklyReport, prevWeek, nextWeek } = useWeeklyReport()
-  const report = getWeeklyReport(todos)
+  const { weekLabel, weeklyReport, prevWeek, nextWeek } = useWeeklyReport()
+  const report = weeklyReport
 
   return (
     <section className={styles.report}>

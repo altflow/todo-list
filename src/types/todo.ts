@@ -35,6 +35,7 @@ export type TodoState = {
 
 export interface StorageAdapter {
   getAll(): Promise<Todo[]>
+  getCompletedByDateRange(start: Date, end: Date): Promise<Todo[]>
   add(todo: Todo): Promise<void>
   update(todo: Todo): Promise<void>
   remove(id: string): Promise<void>

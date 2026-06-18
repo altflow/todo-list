@@ -168,7 +168,7 @@ export const TodoApp = () => {
             <UndoToast deletedStack={deletedStack} onUndo={undoDelete} onClose={dismissDelete} />
           </>
         )}
-        {activeTab === 'report' && <WeeklyReport todos={todos} />}
+        {activeTab === 'report' && <WeeklyReport />}
         {activeTab === 'settings' && <Settings onClearAllCompleted={clearCompleted} />}
       </main>
     </div>
