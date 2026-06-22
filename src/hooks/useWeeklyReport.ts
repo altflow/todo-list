@@ -5,16 +5,10 @@ import { ja } from 'date-fns/locale/ja'
 import { enUS } from 'date-fns/locale/en-US'
 import type { Todo } from '../types/todo'
 import { storageAdapter } from '../db/database'
+import { groupByProject } from '../utils/weeklyReportLogic'
+import type { ProjectReport } from '../utils/weeklyReportLogic'
 
-export type ReportTask = {
-  todo: Todo
-  completedAt: Date
-}
-
-export type ProjectReport = {
-  project: string
-  tasks: ReportTask[]
-}
+export type { ReportTask } from '../utils/weeklyReportLogic'
 
 export const useWeeklyReport = () => {
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(startOfWeek(new Date(), { weekStartsOn: 1 }))
@@ -39,37 +33,8 @@ export const useWeeklyReport = () => {
   }
 
   const getWeeklyReport = (): ProjectReport[] => {
-    const completedTasks = weeklyTodos
-      .filter((todo) => todo.completedAt !== null)
-      .map((todo) => ({ todo, completedAt: todo.completedAt as Date }))
-      .sort((a, b) => a.completedAt.getTime() - b.completedAt.getTime())
-
-    const groups = new Map<string, ReportTask[]>()
-
-    completedTasks.forEach((reportTask) => {
-      const projectKey = reportTask.todo.project === null ? 'General' : reportTask.todo.project
-      const tasks = groups.get(projectKey) ?? []
-      tasks.push(reportTask)
-      groups.set(projectKey, tasks)
-    })
-
-    const groupedReports: ProjectReport[] = []
-    const projectNames = Array.from(groups.keys())
-      .filter((project) => project !== 'General')
-      .sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }))
-
-    projectNames.forEach((project) => {
-      const tasks = groups.get(project)
-      if (tasks) {
-        groupedReports.push({ project, tasks })
-      }
-    })
-
-    if (groups.has('General')) {
-      groupedReports.push({ project: 'General', tasks: groups.get('General') ?? [] })
-    }
-
-    return groupedReports
+    const completedTodos = weeklyTodos.filter((todo) => todo.completedAt !== null)
+    return groupByProject(completedTodos)
   }
 
   const weeklyReport = getWeeklyReport()
