@@ -36,7 +36,8 @@
 .deleteBtn,
 .saveBtn,
 .cancelBtn,
-.dragHandle {
+.dragHandle,
+.timeSessionBtn {
   padding: 4px 8px;
   border: 1px solid var(--color-border-strong);
   border-radius: 4px;
@@ -55,7 +56,26 @@
   color: var(--color-text-primary);
 }
 
-.dragHandle:hover {
+.timeBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.timeSessionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+}
+
+.dragHandle:hover,
+.timeSessionBtn:hover {
   background: var(--color-bg-tertiary);
 }
 

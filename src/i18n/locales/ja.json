@@ -36,6 +36,28 @@
   "weeklyReport": {
     "emptyMessage": "この週に完了したタスクはありません"
   },
+  "timeSessions": {
+    "title": "タイムセッション",
+    "total": "合計 {{duration}}",
+    "addSession": "セッションを追加",
+    "startedAt": "開始時刻",
+    "endedAt": "終了時刻",
+    "note": "メモ（任意）",
+    "save": "保存",
+    "deleteSession": "削除",
+    "delete": "削除",
+    "noSessions": "記録なし",
+    "logButton": "作業時間を記録",
+    "validation": {
+      "endBeforeStart": "終了時刻は開始時刻より後にしてください"
+    },
+    "empty": "まだセッションは記録されていません。",
+    "start": "開始",
+    "end": "終了",
+    "close": "閉じる",
+    "required": "両方の日時を入力してください。",
+    "invalidRange": "終了時刻は開始時刻より後にしてください。"
+  },
   "language": {
     "ja": "日本語",
     "en": "English"

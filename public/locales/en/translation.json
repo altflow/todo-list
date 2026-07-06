@@ -1,0 +1,16 @@
+{
+  "timeSessions": {
+    "total": "Total {{duration}}",
+    "addSession": "Add session",
+    "startedAt": "Started",
+    "endedAt": "Ended",
+    "note": "Memo (optional)",
+    "save": "Save",
+    "deleteSession": "Delete session",
+    "noSessions": "No sessions recorded yet.",
+    "logButton": "Log work time",
+    "validation": {
+      "endBeforeStart": "End time must be later than start time."
+    }
+  }
+}

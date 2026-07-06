@@ -1,13 +1,24 @@
 import Dexie, { type Table } from 'dexie'
 import type { Todo, StorageAdapter } from '../types/todo'
 
+export interface TimeSession {
+  id?: number
+  taskId: string | number
+  startedAt: Date
+  endedAt: Date
+  note?: string
+  createdAt: Date
+}
+
 class TodoDatabase extends Dexie {
   todos!: Table<Todo>
+  timeSessions!: Table<TimeSession>
 
   constructor() {
     super('TodoDB')
-    this.version(1).stores({
+    this.version(2).stores({
       todos: '++id, project, completed, completedAt, order',
+      timeSessions: '++id, taskId, startedAt',
     })
   }
 }

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { startOfWeek, endOfWeek, addWeeks, format, isSameDay } from 'date-fns'
+import { startOfWeek, endOfWeek, addWeeks, format, isSameDay, isWithinInterval } from 'date-fns'
 import { ja } from 'date-fns/locale/ja'
 import { enUS } from 'date-fns/locale/en-US'
 import type { Todo } from '../types/todo'
-import { storageAdapter } from '../db/database'
+import { db, storageAdapter, type TimeSession } from '../db/database'
 import { groupByProject } from '../utils/weeklyReportLogic'
 import type { ProjectReport } from '../utils/weeklyReportLogic'
 
@@ -13,14 +13,21 @@ export type { ReportTask } from '../utils/weeklyReportLogic'
 export const useWeeklyReport = () => {
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(startOfWeek(new Date(), { weekStartsOn: 1 }))
   const [weeklyTodos, setWeeklyTodos] = useState<Todo[]>([])
+  const [weeklyTimeSessions, setWeeklyTimeSessions] = useState<TimeSession[]>([])
 
   useEffect(() => {
+    const weekStart = startOfWeek(currentWeekStart, { weekStartsOn: 1 })
     const weekEnd = endOfWeek(currentWeekStart, { weekStartsOn: 1 })
 
     setWeeklyTodos([])
+    setWeeklyTimeSessions([])
     void (async () => {
-      const todos = await storageAdapter.getCompletedByDateRange(currentWeekStart, weekEnd)
+      const todos = await storageAdapter.getCompletedByDateRange(weekStart, weekEnd)
+      const sessions = await db.timeSessions.where('startedAt').between(weekStart, weekEnd).toArray()
+      const filteredSessions = sessions.filter((session) => isWithinInterval(session.startedAt, { start: weekStart, end: weekEnd }))
+
       setWeeklyTodos(todos)
+      setWeeklyTimeSessions(filteredSessions)
     })()
   }, [currentWeekStart])
 
@@ -34,7 +41,7 @@ export const useWeeklyReport = () => {
 
   const getWeeklyReport = (): ProjectReport[] => {
     const completedTodos = weeklyTodos.filter((todo) => todo.completedAt !== null)
-    return groupByProject(completedTodos)
+    return groupByProject(completedTodos, weeklyTimeSessions)
   }
 
   const weeklyReport = getWeeklyReport()

@@ -3,6 +3,8 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useTranslation } from 'react-i18next'
 import type { Todo } from '../../types/todo'
+import { useTimeSessions, formatDuration } from '../../hooks/useTimeSessions'
+import { TimeSessionModal } from '../TimeSessionModal/TimeSessionModal'
 import styles from './TodoItem.module.css'
 
 interface TodoItemProps {
@@ -20,6 +22,8 @@ function DraggableTodoItem({
   displayTask,
 }: TodoItemProps & { displayTask: string; onEdit: () => void }) {
   const { t } = useTranslation()
+  const { totalMinutes } = useTimeSessions(todo.id)
+  const [isTimeSessionOpen, setIsTimeSessionOpen] = useState(false)
   const {
     attributes,
     listeners,
@@ -54,6 +58,24 @@ function DraggableTodoItem({
       <span className={todo.completed ? styles.completedTask : styles.task}>
         {displayTask}
       </span>
+      {totalMinutes > 0 ? (
+        <span className={styles.timeBadge}>{formatDuration(totalMinutes)}</span>
+      ) : null}
+      <button
+        type="button"
+        className={styles.timeSessionBtn}
+        aria-label="作業時間を記録"
+        onClick={() => setIsTimeSessionOpen(true)}
+      >
+        ⏱
+      </button>
+      {isTimeSessionOpen ? (
+        <TimeSessionModal
+          taskId={todo.id}
+          taskTitle={displayTask}
+          onClose={() => setIsTimeSessionOpen(false)}
+        />
+      ) : null}
       <button onClick={onEdit} className={styles.editBtn}>
         {t('todoItem.editButton')}
       </button>
@@ -71,7 +93,9 @@ export function TodoItem({
   onUpdateTask,
 }: TodoItemProps) {
   const { t } = useTranslation()
+  const { totalMinutes } = useTimeSessions(todo.id)
   const [isEditing, setIsEditing] = useState(false)
+  const [isTimeSessionOpen, setIsTimeSessionOpen] = useState(false)
   const [editValue, setEditValue] = useState(
     todo.project ? `${todo.project}: ${todo.task}` : todo.task
   )
@@ -134,6 +158,24 @@ export function TodoItem({
           className={styles.checkbox}
         />
         <span className={styles.completedTask}>{displayTask}</span>
+        {totalMinutes > 0 ? (
+          <span className={styles.timeBadge}>{formatDuration(totalMinutes)}</span>
+        ) : null}
+        <button
+          type="button"
+          className={styles.timeSessionBtn}
+          aria-label="作業時間を記録"
+          onClick={() => setIsTimeSessionOpen(true)}
+        >
+          ⏱
+        </button>
+        {isTimeSessionOpen ? (
+          <TimeSessionModal
+            taskId={todo.id}
+            taskTitle={displayTask}
+            onClose={() => setIsTimeSessionOpen(false)}
+          />
+        ) : null}
         <button onClick={handleEdit} className={styles.editBtn}>
           {t('todoItem.editButton')}
         </button>

@@ -36,6 +36,27 @@
   "weeklyReport": {
     "emptyMessage": "No completed tasks this week"
   },
+  "timeSessions": {
+    "title": "Time Sessions",
+    "total": "Total {{duration}}",
+    "addSession": "Add session",
+    "startedAt": "Started",
+    "endedAt": "Ended",
+    "note": "Memo (optional)",
+    "save": "Save",
+    "deleteSession": "Delete session",
+    "delete": "Delete",
+    "noSessions": "No sessions recorded yet.",
+    "logButton": "Log work time",
+    "validation": {
+      "endBeforeStart": "End time must be later than start time."
+    },
+    "start": "Start",
+    "end": "End",
+    "close": "Close",
+    "required": "Please enter both times.",
+    "invalidRange": "End time must be later than start time."
+  },
   "language": {
     "ja": "日本語",
     "en": "English"
