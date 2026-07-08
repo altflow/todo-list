@@ -46,6 +46,8 @@
     "save": "Save",
     "deleteSession": "Delete session",
     "delete": "Delete",
+    "edit": "Edit",
+    "cancel": "Cancel",
     "noSessions": "No sessions recorded yet.",
     "logButton": "Log work time",
     "validation": {
@@ -54,8 +56,8 @@
     "start": "Start",
     "end": "End",
     "close": "Close",
-    "required": "Please enter both times.",
-    "invalidRange": "End time must be later than start time."
+    "required": "Required",
+    "invalidRange": "End time must be later"
   },
   "language": {
     "ja": "日本語",

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
-import { renderHook } from '@testing-library/react' 
+import { renderHook } from '@testing-library/react'
 import { useTimeSessions, formatDuration } from './useTimeSessions'
+import { db } from '../db/database'
 
 
 vi.mock('dexie-react-hooks', () => ({
@@ -18,9 +19,10 @@ vi.mock('../db/database', () => ({
     timeSessions: {
       add: vi.fn(),
       delete: vi.fn(),
+      update: vi.fn(),
       where: vi.fn(() => ({
         equals: vi.fn(() => ({
-          sortBy: vi.fn(() => []),  // Promise.resolve([]) → [] に戻す
+          sortBy: vi.fn(() => []),
         })),
       })),
     },
@@ -55,5 +57,19 @@ describe('useTimeSessions', () => {
     await expect(result.current.addSession(start, end)).rejects.toThrow(
       'endedAt must be greater than startedAt'
     )
+  })
+
+  it('updates a session when endedAt is after startedAt', async () => {
+    const start = new Date('2024-01-01T10:00:00')
+    const end = new Date('2024-01-01T10:30:00')
+
+    const { result } = renderHook(() => useTimeSessions('test'))
+
+    await expect(result.current.updateSession(1, start, end, 'updated note')).resolves.toBeUndefined()
+    expect(db.timeSessions.update).toHaveBeenCalledWith(1, {
+      startedAt: start,
+      endedAt: end,
+      note: 'updated note',
+    })
   })
 })

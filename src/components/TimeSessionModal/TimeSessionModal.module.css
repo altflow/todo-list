@@ -10,7 +10,7 @@
 }
 
 .modal {
-  width: min(720px, 100%);
+  width: min(760px, 100%);
   max-height: 90vh;
   overflow: auto;
   background: var(--background-color, #fff);
@@ -50,20 +50,59 @@
   gap: 1.5rem;
 }
 
-.tableWrapper {
-  overflow-x: auto;
+.listWrapper {
+  display: grid;
+  gap: 0.75rem;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
+.sessionList {
+  display: grid;
+  gap: 0.75rem;
 }
 
-.table th,
-.table td {
-  padding: 0.6rem 0.5rem;
-  text-align: left;
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
+.sessionCard {
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 10px;
+  background: var(--secondary-background-color, #f9fafb);
+  padding: 0.9rem 1rem;
+}
+
+.cardContent {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.sessionMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  font-weight: 600;
+}
+
+.duration {
+  color: var(--secondary-text-color, #6b7280);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.cardActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.noteContent {
+  margin: 0;
+  white-space: pre-wrap;
+  color: var(--secondary-text-color, #6b7280);
+  line-height: 1.5;
 }
 
 .empty {
@@ -72,6 +111,7 @@
 }
 
 .deleteButton,
+.editButton,
 .primaryButton,
 .secondaryButton {
   border: none;
@@ -80,19 +120,37 @@
   cursor: pointer;
 }
 
+.editButton {
+  background: var(--secondary-background-color, #e5e7eb);
+  color: inherit;
+}
+
 .deleteButton {
   background: #ef4444;
   color: white;
 }
 
-.form {
+.form,
+.inlineForm {
   display: grid;
   gap: 0.9rem;
+}
+
+.datetimeGroup {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.datetimeRow {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .fieldGroup {
   display: grid;
   gap: 0.35rem;
+  flex: 1 1 240px;
 }
 
 .label {
@@ -100,16 +158,26 @@
   font-weight: 600;
 }
 
-.input,
-.fieldGroup input {
+.fieldGroup input,
+.note,
+.fieldGroup textarea {
   width: 100%;
   padding: 0.65rem 0.75rem;
   border: 1px solid var(--border-color, #d1d5db);
   border-radius: 6px;
   background: var(--background-color, #fff);
   color: inherit;
+  box-sizing: border-box;
 }
 
+.note,
+.fieldGroup textarea {
+  resize: vertical;
+  min-height: 4rem;
+  max-height: 12rem;
+}
+
+.inlineError,
 .error {
   margin: 0;
   color: #dc2626;

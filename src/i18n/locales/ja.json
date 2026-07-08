@@ -46,6 +46,8 @@
     "save": "保存",
     "deleteSession": "削除",
     "delete": "削除",
+    "edit": "編集",
+    "cancel": "キャンセル",
     "noSessions": "記録なし",
     "logButton": "作業時間を記録",
     "validation": {
@@ -55,8 +57,8 @@
     "start": "開始",
     "end": "終了",
     "close": "閉じる",
-    "required": "両方の日時を入力してください。",
-    "invalidRange": "終了時刻は開始時刻より後にしてください。"
+    "required": "必須です",
+    "invalidRange": "終了時刻を後にしてください"
   },
   "language": {
     "ja": "日本語",

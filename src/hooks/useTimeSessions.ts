@@ -7,6 +7,7 @@ export type UseTimeSessionsResult = {
   sessions: TimeSession[] | undefined
   totalMinutes: number
   addSession: (startedAt: Date, endedAt: Date, note?: string) => Promise<void>
+  updateSession: (id: number, startedAt: Date, endedAt: Date, note?: string) => Promise<void>
   deleteSession: (id: number) => Promise<void>
 }
 
@@ -42,6 +43,14 @@ export const useTimeSessions = (taskId: string | number): UseTimeSessionsResult 
     })
   }
 
+  const updateSession = async (id: number, startedAt: Date, endedAt: Date, note?: string): Promise<void> => {
+    if (endedAt <= startedAt) {
+      throw new Error('endedAt must be greater than startedAt')
+    }
+
+    await db.timeSessions.update(id, { startedAt, endedAt, note })
+  }
+
   const deleteSession = async (id: number): Promise<void> => {
     await db.timeSessions.delete(id)
   }
@@ -50,6 +59,7 @@ export const useTimeSessions = (taskId: string | number): UseTimeSessionsResult 
     sessions,
     totalMinutes,
     addSession,
+    updateSession,
     deleteSession,
   }
 }
