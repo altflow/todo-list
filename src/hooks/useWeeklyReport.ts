@@ -69,5 +69,6 @@ export const useWeeklyReport = () => {
     weeklyReport,
     prevWeek,
     nextWeek,
+    weekSessions: weeklyTimeSessions,
   }
 }

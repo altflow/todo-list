@@ -63,9 +63,32 @@
 }
 
 .taskItem {
+  list-style: none;
+}
+
+.taskRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.taskRowInteractive {
+  cursor: pointer;
+}
+
+.taskContent {
   display: flex;
   gap: 0.75rem;
   align-items: baseline;
+}
+
+.taskToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  min-width: 1.5rem;
+  color: var(--color-text-secondary);
 }
 
 .timeValue {
@@ -81,6 +104,41 @@
 
 .taskName {
   flex: 1;
+}
+
+.sessionList {
+  list-style: none;
+  margin: 0 0 0 1.75rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sessionItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.2rem 0;
+}
+
+.sessionMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.sessionDuration {
+  color: var(--color-text-secondary);
+}
+
+.sessionNote {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-left: 0.5rem;
 }
 
 .emptyMessage {
