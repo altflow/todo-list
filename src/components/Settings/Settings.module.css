@@ -1,11 +1,18 @@
 .settings {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   padding: 16px;
   border: 1px solid var(--color-border);
   border-radius: 8px;
   background: var(--color-bg);
+}
+
+.dataSection,
+.exportSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .heading {
@@ -19,18 +26,68 @@
   line-height: 1.5;
 }
 
-.clearButton {
+.clearButton,
+.exportButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 10px 14px;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.clearButton {
   background: var(--color-danger);
   color: #ffffff;
-  cursor: pointer;
 }
 
 .clearButton:hover {
   background: var(--color-danger-hover);
+}
+
+.exportButton {
+  background: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+}
+
+.exportButton:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.exportButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+}
+
+.select,
+.input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }

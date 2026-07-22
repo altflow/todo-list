@@ -69,5 +69,16 @@
     "clearAllCompletedDescription": "Delete all completed tasks. This action cannot be undone.",
     "clearAllCompletedButton": "Clear all completed",
     "clearAllCompletedConfirm": "Delete all completed tasks? This action cannot be undone."
+  },
+  "export": {
+    "title": "Export",
+    "project": "Project",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "download": "Download",
+    "copyToClipboard": "Copy to clipboard",
+    "copied": "Copied",
+    "noSessions": "No sessions",
+    "incomplete": "Incomplete"
   }
 }

@@ -21,6 +21,10 @@ class TodoDatabase extends Dexie {
       timeSessions: '++id, taskId, startedAt',
     })
   }
+
+  get tasks(): Table<Todo> {
+    return this.todos
+  }
 }
 
 export const db = new TodoDatabase()

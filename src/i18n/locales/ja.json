@@ -70,5 +70,16 @@
     "clearAllCompletedDescription": "完了済みのタスクをすべて削除します。この操作は取り消せません。",
     "clearAllCompletedButton": "完了済みをすべて削除",
     "clearAllCompletedConfirm": "完了済みのタスクをすべて削除しますか？この操作は取り消せません。"
+  },
+  "export": {
+    "title": "エクスポート",
+    "project": "プロジェクト",
+    "startDate": "開始日",
+    "endDate": "終了日",
+    "download": "ダウンロード",
+    "copyToClipboard": "クリップボードにコピー",
+    "copied": "コピーしました",
+    "noSessions": "セッションなし",
+    "incomplete": "未完了"
   }
 }
