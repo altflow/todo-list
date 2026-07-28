@@ -9,10 +9,17 @@
 }
 
 .dataSection,
-.exportSection {
+.exportSection,
+.backupSection,
+.restoreSection {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.sectionDivider {
+  border-top: 1px solid var(--color-border);
+  padding-top: 16px;
 }
 
 .heading {
@@ -22,6 +29,7 @@
 
 .description {
   margin: 0;
+  font-size: 0.95rem;
   color: var(--color-text-secondary);
   line-height: 1.5;
 }
@@ -77,7 +85,8 @@
 }
 
 .select,
-.input {
+.input,
+.fileInput {
   width: 100%;
   padding: 8px 10px;
   border: 1px solid var(--color-border);
@@ -90,4 +99,35 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.radioGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.radioOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-primary);
+}
+
+.helperText {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.successMessage {
+  margin: 0;
+  color: var(--color-success, #0f766e);
+  font-size: 0.95rem;
+}
+
+.errorMessage {
+  margin: 0;
+  color: var(--color-danger, #b91c1c);
+  font-size: 0.95rem;
 }

@@ -68,7 +68,19 @@
     "dataManagement": "Data Management",
     "clearAllCompletedDescription": "Delete all completed tasks. This action cannot be undone.",
     "clearAllCompletedButton": "Clear all completed",
-    "clearAllCompletedConfirm": "Delete all completed tasks? This action cannot be undone."
+    "clearAllCompletedConfirm": "Delete all completed tasks? This action cannot be undone.",
+    "markdownExport": {
+      "title": "Markdown Export",
+      "description": "Export your project's work history as Markdown. It can also be used as input for AI tools such as NotebookLM."
+    },
+    "backup": {
+      "title": "Backup",
+      "description": "Save all data as a JSON file. We recommend creating backups regularly."
+    },
+    "restore": {
+      "title": "Restore",
+      "description": "Restore data from a backup file. Existing data will not be deleted."
+    }
   },
   "export": {
     "title": "Export",
@@ -80,5 +92,18 @@
     "copied": "Copied",
     "noSessions": "No sessions",
     "incomplete": "Incomplete"
+  },
+  "dataManagement": {
+    "title": "Data management",
+    "export": "⬇ Export all data",
+    "selectFile": "Select a JSON file",
+    "import": "⬆ Import",
+    "conflictStrategy": "How to handle duplicates",
+    "skip": "Skip (keep existing data)",
+    "overwrite": "Overwrite (prefer imported data)",
+    "confirmImportSkip": "Existing data will be kept and the imported data will be added. Continue?",
+    "confirmImportOverwrite": "Existing data will be overwritten and the imported data will take priority. Continue?",
+    "importSuccess": "Imported {{taskCount}} task(s) and {{sessionCount}} session(s)",
+    "importError": "Import failed. Please check the file."
   }
 }

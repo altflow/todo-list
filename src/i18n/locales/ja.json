@@ -69,7 +69,19 @@
     "dataManagement": "データ管理",
     "clearAllCompletedDescription": "完了済みのタスクをすべて削除します。この操作は取り消せません。",
     "clearAllCompletedButton": "完了済みをすべて削除",
-    "clearAllCompletedConfirm": "完了済みのタスクをすべて削除しますか？この操作は取り消せません。"
+    "clearAllCompletedConfirm": "完了済みのタスクをすべて削除しますか？この操作は取り消せません。",
+    "markdownExport": {
+      "title": "Markdownエクスポート",
+      "description": "プロジェクトの作業記録をMarkdown形式で出力します。NotebookLMなどのAIツールへの入力にも活用できます。"
+    },
+    "backup": {
+      "title": "バックアップ",
+      "description": "全データをJSONファイルとして保存します。定期的にバックアップを取ることをお勧めします。"
+    },
+    "restore": {
+      "title": "リストア",
+      "description": "バックアップファイルからデータを復元します。既存データは削除されません。"
+    }
   },
   "export": {
     "title": "エクスポート",
@@ -81,5 +93,18 @@
     "copied": "コピーしました",
     "noSessions": "セッションなし",
     "incomplete": "未完了"
+  },
+  "dataManagement": {
+    "title": "データ管理",
+    "export": "⬇ 全データをエクスポート",
+    "selectFile": "JSONファイルを選択",
+    "import": "⬆ インポート",
+    "conflictStrategy": "重複データの扱い",
+    "skip": "スキップ（既存データを優先）",
+    "overwrite": "上書き（インポートデータを優先）",
+    "confirmImportSkip": "既存データはそのまま残り、インポートしたデータが追加されます。続けますか？",
+    "confirmImportOverwrite": "既存データは上書きされ、インポートしたデータが反映されます。続けますか？",
+    "importSuccess": "タスク {{taskCount}} 件・セッション {{sessionCount}} 件をインポートしました",
+    "importError": "インポートに失敗しました。ファイルを確認してください。"
   }
 }

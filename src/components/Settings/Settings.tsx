@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/database'
+import { exportAllData, importAllData, type ConflictStrategy } from '../../utils/dataTransfer'
 import { copyToClipboard, downloadMarkdown, generateProjectMarkdown } from '../../utils/exportMarkdown'
 import styles from './Settings.module.css'
 
@@ -23,12 +24,24 @@ const getFirstDayOfCurrentMonth = () => {
   return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-01`
 }
 
+export const getImportConfirmMessage = (t: (key: string) => string, conflictStrategy: ConflictStrategy) => {
+  if (conflictStrategy === 'overwrite') {
+    return t('dataManagement.confirmImportOverwrite')
+  }
+
+  return t('dataManagement.confirmImportSkip')
+}
+
 export const Settings = ({ onClearAllCompleted }: SettingsProps) => {
   const { t } = useTranslation()
   const [selectedProject, setSelectedProject] = useState('')
   const [startDate, setStartDate] = useState(getFirstDayOfCurrentMonth())
   const [endDate, setEndDate] = useState(getTodayString())
   const [copyFeedback, setCopyFeedback] = useState(false)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [conflictStrategy, setConflictStrategy] = useState<ConflictStrategy>('skip')
+  const [importFeedback, setImportFeedback] = useState('')
+  const [importError, setImportError] = useState('')
 
   const projects = useLiveQuery(async () => {
     const todos = await db.todos.toArray()
@@ -90,6 +103,37 @@ export const Settings = ({ onClearAllCompleted }: SettingsProps) => {
     downloadMarkdown(markdown, filename)
   }
 
+  const handleImportFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] ?? null
+    setSelectedFile(file)
+    setImportFeedback('')
+    setImportError('')
+  }
+
+  const handleImport = async () => {
+    if (!selectedFile) {
+      return
+    }
+
+    if (!window.confirm(getImportConfirmMessage(t, conflictStrategy))) {
+      return
+    }
+
+    try {
+      const result = await importAllData(selectedFile, conflictStrategy)
+      setImportFeedback(t('dataManagement.importSuccess', { taskCount: result.taskCount, sessionCount: result.sessionCount }))
+      setImportError('')
+      setSelectedFile(null)
+      const input = document.getElementById('data-import-file') as HTMLInputElement | null
+      if (input) {
+        input.value = ''
+      }
+    } catch {
+      setImportFeedback('')
+      setImportError(t('dataManagement.importError'))
+    }
+  }
+
   return (
     <section className={styles.settings}>
       <section className={styles.dataSection}>
@@ -100,8 +144,9 @@ export const Settings = ({ onClearAllCompleted }: SettingsProps) => {
         </button>
       </section>
 
-      <section className={styles.exportSection}>
-        <h2 className={styles.heading}>{t('export.title')}</h2>
+      <section className={`${styles.exportSection} ${styles.sectionDivider}`}>
+        <h2 className={styles.heading}>{t('settings.markdownExport.title')}</h2>
+        <p className={styles.description}>{t('settings.markdownExport.description')}</p>
         <div className={styles.fieldGroup}>
           <label className={styles.label} htmlFor="project-select">
             {t('export.project')}
@@ -165,6 +210,70 @@ export const Settings = ({ onClearAllCompleted }: SettingsProps) => {
             {t('export.download')}
           </button>
         </div>
+      </section>
+
+      <section className={`${styles.backupSection} ${styles.sectionDivider}`}>
+        <h2 className={styles.heading}>{t('settings.backup.title')}</h2>
+        <p className={styles.description}>{t('settings.backup.description')}</p>
+
+        <div className={styles.buttonRow}>
+          <button type="button" className={styles.exportButton} onClick={() => void exportAllData()}>
+            {t('dataManagement.export')}
+          </button>
+        </div>
+      </section>
+
+      <section className={`${styles.restoreSection} ${styles.sectionDivider}`}>
+        <h2 className={styles.heading}>{t('settings.restore.title')}</h2>
+        <p className={styles.description}>{t('settings.restore.description')}</p>
+
+        <div className={styles.fieldGroup}>
+          <label className={styles.label} htmlFor="data-import-file">
+            {t('dataManagement.selectFile')}
+          </label>
+          <input
+            id="data-import-file"
+            className={styles.fileInput}
+            type="file"
+            accept=".json"
+            onChange={handleImportFileChange}
+          />
+        </div>
+
+        <div className={styles.fieldGroup}>
+          <span className={styles.label}>{t('dataManagement.conflictStrategy')}</span>
+          <div className={styles.radioGroup}>
+            <label className={styles.radioOption}>
+              <input
+                type="radio"
+                name="conflict-strategy"
+                value="skip"
+                checked={conflictStrategy === 'skip'}
+                onChange={() => setConflictStrategy('skip')}
+              />
+              <span>{t('dataManagement.skip')}</span>
+            </label>
+            <label className={styles.radioOption}>
+              <input
+                type="radio"
+                name="conflict-strategy"
+                value="overwrite"
+                checked={conflictStrategy === 'overwrite'}
+                onChange={() => setConflictStrategy('overwrite')}
+              />
+              <span>{t('dataManagement.overwrite')}</span>
+            </label>
+          </div>
+        </div>
+
+        <div className={styles.buttonRow}>
+          <button type="button" className={styles.exportButton} onClick={() => void handleImport()} disabled={!selectedFile}>
+            {t('dataManagement.import')}
+          </button>
+        </div>
+
+        {importFeedback ? <p className={styles.successMessage}>{importFeedback}</p> : null}
+        {importError ? <p className={styles.errorMessage}>{importError}</p> : null}
       </section>
     </section>
   )
