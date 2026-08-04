@@ -5,7 +5,7 @@ const { taskStore, sessionStore, mockTasks, mockSessions } = vi.hoisted(() => {
     { id: 'existing-task', task: 'Existing', completed: false, project: 'Work', order: 0, createdAt: new Date(), updatedAt: new Date(), completedAt: null },
   ]
 
-  const mockSessions = [{ id: 1, taskId: 'existing-task', startedAt: new Date(), endedAt: new Date(), createdAt: new Date() }]
+  const mockSessions = [{ id: 1, taskId: 'existing-task', startedAt: new Date(), endedAt: new Date(), createdAt: new Date(), updatedAt: new Date() }]
 
   return {
     mockTasks,
@@ -62,7 +62,7 @@ describe('dataTransfer', () => {
     mockTasks.length = 1
     mockTasks[0] = { id: 'existing-task', task: 'Existing', completed: false, project: 'Work', order: 0, createdAt: new Date(), updatedAt: new Date(), completedAt: null }
     mockSessions.length = 1
-    mockSessions[0] = { id: 1, taskId: 'existing-task', startedAt: new Date(), endedAt: new Date(), createdAt: new Date() }
+    mockSessions[0] = { id: 1, taskId: 'existing-task', startedAt: new Date(), endedAt: new Date(), createdAt: new Date(), updatedAt: new Date() }
   })
 
   it('imports non-conflicting tasks and sessions when skipping conflicts', async () => {
@@ -90,6 +90,29 @@ describe('dataTransfer', () => {
     expect(taskStore.put).not.toHaveBeenCalled()
     expect(mockTasks[1]?.createdAt).toBeInstanceOf(Date)
     expect(mockSessions[1]?.startedAt).toBeInstanceOf(Date)
+  })
+
+  it('fills in missing updatedAt values for imported tasks and sessions', async () => {
+    const file = new File([
+      JSON.stringify({
+        version: 1,
+        exportedAt: '2024-01-01T00:00:00.000Z',
+        data: {
+          tasks: [
+            { id: 'new-task', task: 'New', completed: false, project: 'Work', order: 1, createdAt: '2024-01-01T00:00:00.000Z', completedAt: null },
+          ],
+          timeSessions: [
+            { id: 11, taskId: 'new-task', startedAt: '2024-01-02T00:00:00.000Z', endedAt: '2024-01-02T01:00:00.000Z', createdAt: '2024-01-02T00:00:00.000Z' },
+          ],
+        },
+      }),
+    ], 'backup.json', { type: 'application/json' })
+
+    const result = await importAllData(file, 'skip')
+
+    expect(result).toEqual({ taskCount: 1, sessionCount: 1 })
+    expect(mockTasks[1]?.updatedAt).toBeInstanceOf(Date)
+    expect(mockSessions[1]?.updatedAt).toBeInstanceOf(Date)
   })
 
   it('exports a downloadable backup payload', async () => {

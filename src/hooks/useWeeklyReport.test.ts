@@ -20,6 +20,7 @@ const makeSession = (overrides: Partial<TimeSession>): TimeSession => ({
   startedAt: new Date('2024-01-08T10:00:00'),
   endedAt: new Date('2024-01-08T10:30:00'),
   createdAt: new Date('2024-01-08T10:00:00'),
+  updatedAt: new Date('2024-01-08T10:00:00'),
   ...overrides,
 })
 

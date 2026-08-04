@@ -24,6 +24,7 @@ export interface BackupPayload {
       endedAt: Date
       note?: string
       createdAt: Date
+      updatedAt: Date
     }>
   }
 }
@@ -68,7 +69,7 @@ export async function importAllData(
   const normalizedTasks = tasks.map((task) => ({
     ...task,
     createdAt: toDate(task.createdAt),
-    updatedAt: toDate(task.updatedAt),
+    updatedAt: task.updatedAt ? toDate(task.updatedAt) : new Date(),
     completedAt: task.completedAt ? toDate(task.completedAt) : null,
   }))
   const normalizedTimeSessions = timeSessions.map((session) => ({
@@ -76,6 +77,7 @@ export async function importAllData(
     startedAt: toDate(session.startedAt),
     endedAt: toDate(session.endedAt),
     createdAt: toDate(session.createdAt),
+    updatedAt: session.updatedAt ? toDate(session.updatedAt) : new Date(),
   }))
 
   if (conflictStrategy === 'overwrite') {

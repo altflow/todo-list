@@ -35,6 +35,7 @@ const makeSession = (overrides: Partial<TimeSession> = {}): TimeSession => ({
   endedAt: overrides.endedAt ?? new Date(2024, 0, 5, 10, 30),
   note: overrides.note,
   createdAt: new Date(2024, 0, 5, 10, 0),
+  updatedAt: new Date(2024, 0, 5, 10, 0),
 })
 
 describe('WeeklyReport', () => {

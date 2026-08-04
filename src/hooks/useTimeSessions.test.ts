@@ -59,17 +59,35 @@ describe('useTimeSessions', () => {
     )
   })
 
-  it('updates a session when endedAt is after startedAt', async () => {
+  it('adds a session with updatedAt when endedAt is after startedAt', async () => {
+    const start = new Date('2024-01-01T10:00:00')
+    const end = new Date('2024-01-01T10:30:00')
+
+    const { result } = renderHook(() => useTimeSessions('test'))
+
+    await expect(result.current.addSession(start, end, 'new note')).resolves.toBeUndefined()
+    expect(db.timeSessions.add).toHaveBeenCalledWith(expect.objectContaining({
+      taskId: 'test',
+      startedAt: start,
+      endedAt: end,
+      note: 'new note',
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    }))
+  })
+
+  it('updates a session with updatedAt when endedAt is after startedAt', async () => {
     const start = new Date('2024-01-01T10:00:00')
     const end = new Date('2024-01-01T10:30:00')
 
     const { result } = renderHook(() => useTimeSessions('test'))
 
     await expect(result.current.updateSession(1, start, end, 'updated note')).resolves.toBeUndefined()
-    expect(db.timeSessions.update).toHaveBeenCalledWith(1, {
+    expect(db.timeSessions.update).toHaveBeenCalledWith(1, expect.objectContaining({
       startedAt: start,
       endedAt: end,
       note: 'updated note',
-    })
+      updatedAt: expect.any(Date),
+    }))
   })
 })
