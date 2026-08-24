@@ -106,5 +106,19 @@
     "confirmImportOverwrite": "既存データは上書きされ、インポートしたデータが反映されます。続けますか？",
     "importSuccess": "タスク {{taskCount}} 件・セッション {{sessionCount}} 件をインポートしました",
     "importError": "インポートに失敗しました。ファイルを確認してください。"
+  },
+  "cloudSync": {
+    "title": "クラウド同期",
+    "provider": "同期プロバイダー",
+    "disabled": "無効",
+    "googleDrive": "Google Drive",
+    "login": "Google アカウントでログイン",
+    "connected": "接続中",
+    "lastSynced": "最終同期: {{time}}",
+    "syncNow": "今すぐ同期",
+    "logout": "ログアウト",
+    "syncing": "同期中...",
+    "syncError": "同期に失敗しました。",
+    "note": "同期を有効にした場合のみ Google へのログインが必要です。"
   }
 }

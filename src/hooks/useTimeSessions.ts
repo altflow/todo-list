@@ -11,12 +11,12 @@ export type UseTimeSessionsResult = {
   deleteSession: (id: number) => Promise<void>
 }
 
-export const useTimeSessions = (taskId: string | number): UseTimeSessionsResult => {
+export const useTimeSessions = (taskId: string | number, syncVersion = 0): UseTimeSessionsResult => {
   const normalizedTaskId = taskId
 
   const sessions = useLiveQuery(
     () => db.timeSessions.where('taskId').equals(normalizedTaskId).sortBy('startedAt'),
-    [normalizedTaskId]
+    [normalizedTaskId, syncVersion]
   )
 
   const totalMinutes = useMemo<number>(() => {

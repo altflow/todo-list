@@ -10,7 +10,7 @@ import type { ProjectReport } from '../utils/weeklyReportLogic'
 
 export type { ReportTask } from '../utils/weeklyReportLogic'
 
-export const useWeeklyReport = () => {
+export const useWeeklyReport = (syncVersion = 0) => {
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(startOfWeek(new Date(), { weekStartsOn: 1 }))
   const [weeklyTodos, setWeeklyTodos] = useState<Todo[]>([])
   const [weeklyTimeSessions, setWeeklyTimeSessions] = useState<TimeSession[]>([])
@@ -29,7 +29,7 @@ export const useWeeklyReport = () => {
       setWeeklyTodos(todos)
       setWeeklyTimeSessions(filteredSessions)
     })()
-  }, [currentWeekStart])
+  }, [currentWeekStart, syncVersion])
 
   const prevWeek = () => {
     setCurrentWeekStart((current) => addWeeks(current, -1))

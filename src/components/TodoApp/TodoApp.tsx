@@ -1,7 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import type { ProjectFilter } from '../../types/todo'
 import { useTranslation } from 'react-i18next'
 import { useTodos } from '../../hooks/useTodos'
+import { GoogleDriveProvider } from '../../sync/providers/GoogleDriveProvider'
+import { syncToDrive, syncFromDrive } from '../../sync/syncManager'
+import debounce from 'lodash/debounce'
 import { useTheme, type Theme } from '../../hooks/useTheme'
 import styles from './TodoApp.module.css'
 import { TodoInput } from '../TodoInput/TodoInput.tsx'
@@ -23,6 +26,7 @@ export const TodoApp = () => {
   const [selectedFilter, setSelectedFilter] = useState<ProjectFilter>('all')
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false)
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false)
+  const [syncVersion, setSyncVersion] = useState(0)
   const langMenuRef = useRef<HTMLDivElement | null>(null)
   const themeMenuRef = useRef<HTMLDivElement | null>(null)
   const { t, i18n } = useTranslation()
@@ -38,7 +42,104 @@ export const TodoApp = () => {
     updateTask,
     reorder,
     clearCompleted,
-  } = useTodos()
+  } = useTodos(syncVersion)
+
+  useEffect(() => {
+    const handleSyncCompleted = () => {
+      setSyncVersion((value) => value + 1)
+    }
+
+    window.addEventListener('sync-completed', handleSyncCompleted)
+    return () => {
+      window.removeEventListener('sync-completed', handleSyncCompleted)
+    }
+  }, [])
+
+  useEffect(() => {
+    const syncOnStartup = async () => {
+      const syncEnabled = localStorage.getItem('sync_enabled') === 'true'
+      if (!syncEnabled) return
+
+      const provider = new GoogleDriveProvider()
+      if (!provider.isAuthenticated()) return
+
+      try {
+        await syncFromDrive(provider)
+        const now = new Date().toLocaleString()
+        localStorage.setItem('sync_last_synced', now)
+      } catch (e) {
+        // 起動時の同期エラーはログに出すのみ
+        // eslint-disable-next-line no-console
+        console.error('起動時の同期に失敗しました', e)
+      }
+    }
+
+    void syncOnStartup()
+  }, [])
+
+  const debouncedSyncToDrive = useMemo(
+    () =>
+      debounce(async () => {
+        const syncEnabled = localStorage.getItem('sync_enabled') === 'true'
+        if (!syncEnabled) return
+
+        const provider = new GoogleDriveProvider()
+        if (!provider.isAuthenticated()) return
+
+        try {
+          await syncToDrive(provider)
+          const now = new Date().toLocaleString()
+          localStorage.setItem('sync_last_synced', now)
+        } catch (e) {
+          // 同期エラーはログに出すのみ
+          // eslint-disable-next-line no-console
+          console.error('同期に失敗しました', e)
+        }
+      }, 3000),
+    [],
+  )
+
+  const handleAddTodo = (task: string) => {
+    void (async () => {
+      await addTodo(task)
+      void debouncedSyncToDrive()
+    })()
+  }
+
+  const handleToggleComplete = (id: string) => {
+    void (async () => {
+      await toggleComplete(id)
+      void debouncedSyncToDrive()
+    })()
+  }
+
+  const handleDelete = (id: string) => {
+    void (async () => {
+      await deleteTodo(id)
+      void debouncedSyncToDrive()
+    })()
+  }
+
+  const handleUpdateTask = (id: string, task: string) => {
+    void (async () => {
+      await updateTask(id, task)
+      void debouncedSyncToDrive()
+    })()
+  }
+
+  const handleReorder = (activeId: string, overId: string) => {
+    void (async () => {
+      await reorder(activeId, overId)
+      void debouncedSyncToDrive()
+    })()
+  }
+
+  const handleClearCompleted = () => {
+    void (async () => {
+      await clearCompleted()
+      void debouncedSyncToDrive()
+    })()
+  }
 
   useEffect(() => {
     if (!isLangMenuOpen && !isThemeMenuOpen) {
@@ -72,7 +173,7 @@ export const TodoApp = () => {
   }
 
   return (
-    <div className={styles.app}>
+    <div className={styles.app} data-sync-version={syncVersion}>
       <header className={styles.header}>
         <h1>{t('app.title')}</h1>
         <nav className={styles.nav}>
@@ -150,7 +251,7 @@ export const TodoApp = () => {
       <main className={styles.main}>
         {activeTab === 'todo' && (
           <>
-            <TodoInput onAdd={addTodo} />
+            <TodoInput onAdd={handleAddTodo} />
             <ProjectFilterComponent
               todos={todos}
               selectedFilter={selectedFilter}
@@ -159,17 +260,18 @@ export const TodoApp = () => {
             <TodoList
               todos={todos}
               selectedFilter={selectedFilter}
-              onToggleComplete={toggleComplete}
-              onDelete={deleteTodo}
-              onUpdateTask={updateTask}
-              onReorder={reorder}
-              onClearCompleted={clearCompleted}
+              onToggleComplete={handleToggleComplete}
+              onDelete={handleDelete}
+              onUpdateTask={handleUpdateTask}
+              onReorder={handleReorder}
+              onClearCompleted={handleClearCompleted}
+              syncVersion={syncVersion}
             />
             <UndoToast deletedStack={deletedStack} onUndo={undoDelete} onClose={dismissDelete} />
           </>
         )}
         {activeTab === 'report' && <WeeklyReport />}
-        {activeTab === 'settings' && <Settings onClearAllCompleted={clearCompleted} />}
+        {activeTab === 'settings' && <Settings onClearAllCompleted={handleClearCompleted} />}
       </main>
     </div>
   )

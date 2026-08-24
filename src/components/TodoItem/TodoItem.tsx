@@ -12,6 +12,7 @@ interface TodoItemProps {
   onToggleComplete: (id: string) => void
   onDelete: (id: string) => void
   onUpdateTask: (id: string, task: string) => void
+  syncVersion: number
 }
 
 function DraggableTodoItem({
@@ -20,9 +21,10 @@ function DraggableTodoItem({
   onDelete,
   onEdit,
   displayTask,
+  syncVersion,
 }: TodoItemProps & { displayTask: string; onEdit: () => void }) {
   const { t } = useTranslation()
-  const { totalMinutes } = useTimeSessions(todo.id)
+  const { totalMinutes } = useTimeSessions(todo.id, syncVersion)
   const [isTimeSessionOpen, setIsTimeSessionOpen] = useState(false)
   const {
     attributes,
@@ -74,6 +76,7 @@ function DraggableTodoItem({
           taskId={todo.id}
           taskTitle={displayTask}
           onClose={() => setIsTimeSessionOpen(false)}
+          syncVersion={syncVersion}
         />
       ) : null}
       <button onClick={onEdit} className={styles.editBtn}>
@@ -91,9 +94,10 @@ export function TodoItem({
   onToggleComplete,
   onDelete,
   onUpdateTask,
+  syncVersion,
 }: TodoItemProps) {
   const { t } = useTranslation()
-  const { totalMinutes } = useTimeSessions(todo.id)
+  const { totalMinutes } = useTimeSessions(todo.id, syncVersion)
   const [isEditing, setIsEditing] = useState(false)
   const [isTimeSessionOpen, setIsTimeSessionOpen] = useState(false)
   const [editValue, setEditValue] = useState(
@@ -174,6 +178,7 @@ export function TodoItem({
             taskId={todo.id}
             taskTitle={displayTask}
             onClose={() => setIsTimeSessionOpen(false)}
+            syncVersion={syncVersion}
           />
         ) : null}
         <button onClick={handleEdit} className={styles.editBtn}>
@@ -194,6 +199,7 @@ export function TodoItem({
       onEdit={handleEdit}
       onUpdateTask={onUpdateTask}
       displayTask={displayTask}
+      syncVersion={syncVersion}
     />
   )
 }

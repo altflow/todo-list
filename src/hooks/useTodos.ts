@@ -110,7 +110,7 @@ export const todoReducer = (state: TodoState, action: TodoAction): TodoState => 
   }
 }
 
-export const useTodos = () => {
+export const useTodos = (syncVersion = 0) => {
   const [state, dispatch] = useReducer(todoReducer, initialState)
 
   useEffect(() => {
@@ -118,7 +118,7 @@ export const useTodos = () => {
       const todos = await storageAdapter.getAll()
       dispatch({ type: 'LOAD', todos })
     })()
-  }, [])
+  }, [syncVersion])
 
   const addTodo = useCallback(async (task: string) => {
     const newTodo = createTodo(task, state.todos.length)

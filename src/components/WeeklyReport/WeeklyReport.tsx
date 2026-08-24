@@ -8,9 +8,9 @@ import styles from './WeeklyReport.module.css'
 
 type TaskId = string | number
 
-export const WeeklyReport = () => {
+export const WeeklyReport = ({ syncVersion = 0 }: { syncVersion?: number }) => {
   const { t } = useTranslation()
-  const { weekLabel, weeklyReport, prevWeek, nextWeek, weekSessions } = useWeeklyReport()
+  const { weekLabel, weeklyReport, prevWeek, nextWeek, weekSessions } = useWeeklyReport(syncVersion)
   const report = weeklyReport
   const [expandedTaskIds, setExpandedTaskIds] = useState<Set<TaskId>>(new Set())
 

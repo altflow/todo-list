@@ -9,14 +9,15 @@ interface Props {
   taskId: string | number
   taskTitle: string
   onClose: () => void
+  syncVersion?: number
 }
 
 const formatDateTimeLocal = (date: Date): string => format(date, "yyyy-MM-dd'T'HH:mm")
 
-export const TimeSessionModal = ({ taskId, taskTitle, onClose }: Props) => {
+export const TimeSessionModal = ({ taskId, taskTitle, onClose, syncVersion = 0 }: Props) => {
   const { t } = useTranslation()
   const timeSessionsT = (key: string) => t(`timeSessions.${key}`)
-  const { sessions, totalMinutes, addSession, updateSession, deleteSession } = useTimeSessions(taskId)
+  const { sessions, totalMinutes, addSession, updateSession, deleteSession } = useTimeSessions(taskId, syncVersion)
 
   const [startedAt, setStartedAt] = useState('')
   const [endedAt, setEndedAt] = useState('')

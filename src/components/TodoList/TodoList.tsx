@@ -13,6 +13,7 @@ interface TodoListProps {
   onUpdateTask: (id: string, task: string) => void
   onReorder: (activeId: string, overId: string) => void
   onClearCompleted: () => void
+  syncVersion: number
 }
 
 export function TodoList({
@@ -23,6 +24,7 @@ export function TodoList({
   onUpdateTask,
   onReorder,
   onClearCompleted,
+  syncVersion,
 }: TodoListProps) {
   const { t } = useTranslation()
   const filterBySelectedFilter = (todo: Todo) => {
@@ -83,6 +85,7 @@ export function TodoList({
                   onToggleComplete={onToggleComplete}
                   onDelete={onDelete}
                   onUpdateTask={onUpdateTask}
+                  syncVersion={syncVersion}
                 />
               ))}
             </SortableContext>
@@ -102,6 +105,7 @@ export function TodoList({
               onToggleComplete={onToggleComplete}
               onDelete={onDelete}
               onUpdateTask={onUpdateTask}
+              syncVersion={syncVersion}
             />
           ))
         )}
