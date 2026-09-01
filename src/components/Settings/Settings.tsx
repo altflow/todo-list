@@ -37,6 +37,7 @@ export const getImportConfirmMessage = (t: (key: string) => string, conflictStra
 
 export const Settings = ({ onClearAllCompleted, syncVersion = 0 }: SettingsProps) => {
   const { t } = useTranslation()
+  const isGoogleDriveAvailable = !!import.meta.env.VITE_GOOGLE_CLIENT_ID
   const [selectedProject, setSelectedProject] = useState('')
   const [startDate, setStartDate] = useState(getFirstDayOfCurrentMonth())
   const [endDate, setEndDate] = useState(getTodayString())
@@ -56,6 +57,18 @@ export const Settings = ({ onClearAllCompleted, syncVersion = 0 }: SettingsProps
     return Array.from(new Set(todos.map((todo) => todo.project).filter((project): project is string => Boolean(project))))
       .sort((left, right) => left.localeCompare(right))
   }, [syncVersion])
+
+  useEffect(() => {
+    if (!isGoogleDriveAvailable && syncEnabled) {
+      localStorage.setItem('sync_enabled', 'false')
+      setSyncEnabled(false)
+      const provider = new GoogleDriveProvider()
+      provider.logout()
+      setIsAuthenticated(false)
+      setLastSynced(null)
+      localStorage.removeItem('sync_last_synced')
+    }
+  }, [])
 
   useEffect(() => {
     if (!projects || projects.length === 0) {
@@ -113,6 +126,10 @@ export const Settings = ({ onClearAllCompleted, syncVersion = 0 }: SettingsProps
   }
 
   const handleProviderChange = (value: 'disabled' | 'googleDrive') => {
+    if (value === 'googleDrive' && !isGoogleDriveAvailable) {
+      return
+    }
+
     if (value === 'disabled') {
       const provider = new GoogleDriveProvider()
       void provider.logout()
@@ -211,11 +228,15 @@ export const Settings = ({ onClearAllCompleted, syncVersion = 0 }: SettingsProps
                 name="sync-provider"
                 value="googleDrive"
                 checked={syncEnabled}
+                disabled={!isGoogleDriveAvailable}
                 onChange={() => handleProviderChange('googleDrive')}
               />
               <span>{t('cloudSync.googleDrive')}</span>
             </label>
           </div>
+          {!isGoogleDriveAvailable ? (
+            <p className={styles.unavailableText}>{t('cloudSync.googleDriveUnavailable')}</p>
+          ) : null}
         </div>
 
         {syncEnabled ? (

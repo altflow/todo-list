@@ -119,6 +119,7 @@
     "logout": "ログアウト",
     "syncing": "同期中...",
     "syncError": "同期に失敗しました。",
-    "note": "同期を有効にした場合のみ Google へのログインが必要です。"
+    "note": "同期を有効にした場合のみ Google へのログインが必要です。",
+    "googleDriveUnavailable": "Google Drive を使用するには、独自のクライアント ID の設定が必要です。詳しくは README をご覧ください。"
   }
 }

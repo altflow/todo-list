@@ -118,6 +118,7 @@
     "logout": "Logout",
     "syncing": "Syncing...",
     "syncError": "Sync failed.",
-    "note": "Google login is required only when sync is enabled."
+    "note": "Google login is required only when sync is enabled.",
+    "googleDriveUnavailable": "To use Google Drive, you need to configure your own client ID. Please see the README for details."
   }
 }
