@@ -1,73 +1,114 @@
-# React + TypeScript + Vite
+# Todo List
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal productivity app for task management and time tracking, built with modern web technologies and designed as a Progressive Web App (PWA).
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Task Management** — Add, edit, delete, and complete tasks
+- **Project Filtering** — Organize tasks by project
+- **Drag & Drop** — Reorder tasks intuitively
+- **Delete Undo** — Restore the last deleted task
+- **Time Tracking** — Log work sessions manually with start/end times and notes
+- **Weekly Report** — View completed tasks and time spent, grouped by project, with expandable session details
+- **Markdown Export** — Export project work history as Markdown (great for use with NotebookLM and other AI tools)
+- **Backup & Restore** — Export and import all data as JSON
+- **Cloud Sync** *(optional)* — Sync across devices via Google Drive
+- **PWA** — Install as a native-like app on desktop and mobile
+- **Themes** — Light, Dark, and Auto
+- **Internationalization** — Japanese and English
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- TypeScript / React 19 / Vite
+- Dexie.js (IndexedDB)
+- date-fns
+- react-i18next
+- @dnd-kit
+- Vitest
+- CSS Modules
+- vite-plugin-pwa
 
-## Expanding the ESLint configuration
+## Live Demo
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+[https://altflow.github.io/todo-list/](https://altflow.github.io/todo-list/)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+> Cloud sync is disabled in the public demo. To enable it, set up your own Google Client ID (see below).
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Getting Started
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Prerequisites
+
+- Node.js 20+
+- npm
+
+### Installation
+
+```bash
+git clone https://github.com/altflow/todo-list.git
+cd todo-list
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Google Drive Sync (Optional)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Cloud sync is disabled by default. To enable it, you need to obtain your own Google OAuth Client ID.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Step 1: Create a Google Cloud Project
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project (or use an existing one)
+
+### Step 2: Enable the Google Drive API
+
 ```
+APIs & Services → Library → Search "Google Drive API" → Enable
+```
+
+### Step 3: Configure the OAuth Consent Screen
+
+```
+APIs & Services → OAuth consent screen
+- User type: External
+- App name: Todo List (or any name)
+- Scopes: https://www.googleapis.com/auth/drive.appdata
+- Test users: Add your own Google account
+```
+
+> The `drive.appdata` scope only accesses a hidden app-specific folder in Drive. It cannot read or modify any of your personal Drive files.
+
+### Step 4: Create an OAuth 2.0 Client ID
+
+```
+APIs & Services → Credentials → Create Credentials → OAuth client ID
+- Application type: Web application
+- Authorized JavaScript origins:
+    http://localhost:5173 (for local development)
+    https://your-domain.com (for production)
+```
+
+### Step 5: Configure the Environment Variable
+
+Create a `.env.local` file in the project root:
+
+```
+VITE_GOOGLE_CLIENT_ID=your-client-id-here
+```
+
+Restart the dev server. The Google Drive sync option will appear in Settings.
+
+## Running Tests
+
+```bash
+npx vitest run
+```
+
+## Building for Production
+
+```bash
+npm run build
+```
+
+## License
+
+MIT
