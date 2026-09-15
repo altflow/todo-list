@@ -8,13 +8,13 @@ import styles from './TimeSessionModal.module.css'
 interface Props {
   taskId: string | number
   taskTitle: string
-  onClose: () => void
+  onBack: () => void
   syncVersion?: number
 }
 
 const formatDateTimeLocal = (date: Date): string => format(date, "yyyy-MM-dd'T'HH:mm")
 
-export const TimeSessionModal = ({ taskId, taskTitle, onClose, syncVersion = 0 }: Props) => {
+export const TimeSessionModal = ({ taskId, taskTitle, onBack, syncVersion = 0 }: Props) => {
   const { t } = useTranslation()
   const timeSessionsT = (key: string) => t(`timeSessions.${key}`)
   const { sessions, totalMinutes, addSession, updateSession, deleteSession } = useTimeSessions(taskId, syncVersion)
@@ -93,20 +93,34 @@ export const TimeSessionModal = ({ taskId, taskTitle, onClose, syncVersion = 0 }
     setEditNote('')
   }
 
+  const handleNoteInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    event.target.style.height = 'auto'
+    event.target.style.height = `${event.target.scrollHeight}px`
+    setNote(event.target.value)
+  }
+
+  const handleEditNoteInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    event.target.style.height = 'auto'
+    event.target.style.height = `${event.target.scrollHeight}px`
+    setEditNote(event.target.value)
+  }
+
   const sessionRows = useMemo(() => sessions ?? [], [sessions])
 
   return (
-    <div className={styles.overlay} role="presentation" onClick={onClose}>
-      <div className={styles.modal} role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
-        <div className={styles.header}>
-          <div>
-            <h2 className={styles.title}>{taskTitle}</h2>
-            <p className={styles.subtitle}>{timeSessionsT('title')}</p>
-          </div>
-          <div className={styles.totalTime}>{formatDuration(totalMinutes)}</div>
+    <div className={styles.page}>
+      <header className={styles.header}>
+        <button type="button" className={styles.backButton} onClick={onBack} aria-label={timeSessionsT('back')}>
+          &lt;
+        </button>
+        <div className={styles.headerTitle}>
+          <h1 className={styles.title}>{taskTitle}</h1>
+          <p className={styles.subtitle}>{timeSessionsT('title')}</p>
         </div>
+        <div className={styles.totalTime}>{formatDuration(totalMinutes)}</div>
+      </header>
 
-        <div className={styles.content}>
+      <main className={styles.content}>
           <div className={styles.listWrapper}>
             {sessionRows.length === 0 ? (
               <p className={styles.empty}>{timeSessionsT('empty')}</p>
@@ -163,10 +177,9 @@ export const TimeSessionModal = ({ taskId, taskTitle, onClose, syncVersion = 0 }
                             </label>
                             <textarea
                               id={`edit-note-${session.id}`}
-                              rows={4}
-                              className={styles.note}
+                              className={styles.noteTextarea}
                               value={editNote}
-                              onChange={(event) => setEditNote(event.target.value)}
+                              onChange={handleEditNoteInput}
                               placeholder={t('note')}
                             />
                           </div>
@@ -264,25 +277,20 @@ export const TimeSessionModal = ({ taskId, taskTitle, onClose, syncVersion = 0 }
               </label>
               <textarea
                 id="note"
-                rows={4}
-                className={styles.note}
+                className={styles.noteTextarea}
                 value={note}
-                onChange={(event) => setNote(event.target.value)}
+                onChange={handleNoteInput}
                 placeholder={timeSessionsT('note')}
               />
             </div>
 
             <div className={styles.actions}>
-              <button type="button" className={styles.secondaryButton} onClick={onClose}>
-                {timeSessionsT('close')}
-              </button>
               <button type="submit" className={styles.primaryButton}>
                 {timeSessionsT('save')}
               </button>
             </div>
           </form>
-        </div>
-      </div>
+      </main>
     </div>
   )
 }

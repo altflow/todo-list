@@ -1,9 +1,11 @@
+import { useEffect } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
 import { useTranslation } from 'react-i18next'
-import type { Todo, ProjectFilter as ProjectFilterType } from '../../types/todo'
+import { db } from '../../db/database'
+import type { ProjectFilter as ProjectFilterType } from '../../types/todo'
 import styles from './ProjectFilter.module.css'
 
 interface ProjectFilterProps {
-  todos: Todo[]
   selectedFilter: ProjectFilterType
   onFilterChange: (filter: ProjectFilterType) => void
 }
@@ -11,16 +13,29 @@ interface ProjectFilterProps {
 const FILTERS: ProjectFilterType[] = ['all', 'general']
 
 export function ProjectFilter({
-  todos,
   selectedFilter,
   onFilterChange,
 }: ProjectFilterProps) {
   const { t } = useTranslation()
+  const incompleteTodos = useLiveQuery(() =>
+    db.todos.filter((todo) => todo.completedAt === null && todo.project !== null).toArray(),
+  )
   const projectNames = Array.from(
-    new Set(todos.flatMap((todo) => (todo.project ? [todo.project] : [])))
+    new Set(incompleteTodos?.flatMap((todo) => (todo.project ? [todo.project] : [])) ?? [])
   ).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
 
-  if (projectNames.length === 0) {
+  useEffect(() => {
+    if (
+      selectedFilter !== 'all' &&
+      selectedFilter !== 'general' &&
+      incompleteTodos &&
+      !projectNames.includes(selectedFilter)
+    ) {
+      onFilterChange('all')
+    }
+  }, [incompleteTodos, onFilterChange, projectNames, selectedFilter])
+
+  if (!incompleteTodos || projectNames.length === 0) {
     return null
   }
 

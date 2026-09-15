@@ -11,8 +11,8 @@ interface TodoListProps {
   onToggleComplete: (id: string) => void
   onDelete: (id: string) => void
   onUpdateTask: (id: string, task: string) => void
+  onOpenTimeSession: (id: string) => void
   onReorder: (activeId: string, overId: string) => void
-  onClearCompleted: () => void
   syncVersion: number
 }
 
@@ -22,8 +22,8 @@ export function TodoList({
   onToggleComplete,
   onDelete,
   onUpdateTask,
+  onOpenTimeSession,
   onReorder,
-  onClearCompleted,
   syncVersion,
 }: TodoListProps) {
   const { t } = useTranslation()
@@ -85,6 +85,7 @@ export function TodoList({
                   onToggleComplete={onToggleComplete}
                   onDelete={onDelete}
                   onUpdateTask={onUpdateTask}
+                  onOpenTimeSession={onOpenTimeSession}
                   syncVersion={syncVersion}
                 />
               ))}
@@ -105,18 +106,10 @@ export function TodoList({
               onToggleComplete={onToggleComplete}
               onDelete={onDelete}
               onUpdateTask={onUpdateTask}
+              onOpenTimeSession={onOpenTimeSession}
               syncVersion={syncVersion}
             />
           ))
-        )}
-        {completedTodos.length > 0 && (
-          <button
-            type="button"
-            className={styles.clearButton}
-            onClick={onClearCompleted}
-          >
-            {t('todoList.clearCompleted')}
-          </button>
         )}
       </section>
     </div>

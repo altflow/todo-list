@@ -4,7 +4,6 @@ import { CSS } from '@dnd-kit/utilities'
 import { useTranslation } from 'react-i18next'
 import type { Todo } from '../../types/todo'
 import { useTimeSessions, formatDuration } from '../../hooks/useTimeSessions'
-import { TimeSessionModal } from '../TimeSessionModal/TimeSessionModal'
 import styles from './TodoItem.module.css'
 
 interface TodoItemProps {
@@ -12,6 +11,7 @@ interface TodoItemProps {
   onToggleComplete: (id: string) => void
   onDelete: (id: string) => void
   onUpdateTask: (id: string, task: string) => void
+  onOpenTimeSession: (id: string) => void
   syncVersion: number
 }
 
@@ -20,12 +20,12 @@ function DraggableTodoItem({
   onToggleComplete,
   onDelete,
   onEdit,
+  onOpenTimeSession,
   displayTask,
   syncVersion,
 }: TodoItemProps & { displayTask: string; onEdit: () => void }) {
   const { t } = useTranslation()
   const { totalMinutes } = useTimeSessions(todo.id, syncVersion)
-  const [isTimeSessionOpen, setIsTimeSessionOpen] = useState(false)
   const {
     attributes,
     listeners,
@@ -67,18 +67,10 @@ function DraggableTodoItem({
         type="button"
         className={styles.timeSessionBtn}
         aria-label="作業時間を記録"
-        onClick={() => setIsTimeSessionOpen(true)}
+        onClick={() => onOpenTimeSession(todo.id)}
       >
         ⏱
       </button>
-      {isTimeSessionOpen ? (
-        <TimeSessionModal
-          taskId={todo.id}
-          taskTitle={displayTask}
-          onClose={() => setIsTimeSessionOpen(false)}
-          syncVersion={syncVersion}
-        />
-      ) : null}
       <button onClick={onEdit} className={styles.editBtn}>
         {t('todoItem.editButton')}
       </button>
@@ -94,12 +86,12 @@ export function TodoItem({
   onToggleComplete,
   onDelete,
   onUpdateTask,
+  onOpenTimeSession,
   syncVersion,
 }: TodoItemProps) {
   const { t } = useTranslation()
   const { totalMinutes } = useTimeSessions(todo.id, syncVersion)
   const [isEditing, setIsEditing] = useState(false)
-  const [isTimeSessionOpen, setIsTimeSessionOpen] = useState(false)
   const [editValue, setEditValue] = useState(
     todo.project ? `${todo.project}: ${todo.task}` : todo.task
   )
@@ -169,18 +161,10 @@ export function TodoItem({
           type="button"
           className={styles.timeSessionBtn}
           aria-label="作業時間を記録"
-          onClick={() => setIsTimeSessionOpen(true)}
+          onClick={() => onOpenTimeSession(todo.id)}
         >
           ⏱
         </button>
-        {isTimeSessionOpen ? (
-          <TimeSessionModal
-            taskId={todo.id}
-            taskTitle={displayTask}
-            onClose={() => setIsTimeSessionOpen(false)}
-            syncVersion={syncVersion}
-          />
-        ) : null}
         <button onClick={handleEdit} className={styles.editBtn}>
           {t('todoItem.editButton')}
         </button>
@@ -198,6 +182,7 @@ export function TodoItem({
       onDelete={onDelete}
       onEdit={handleEdit}
       onUpdateTask={onUpdateTask}
+      onOpenTimeSession={onOpenTimeSession}
       displayTask={displayTask}
       syncVersion={syncVersion}
     />

@@ -13,6 +13,7 @@ import { UndoToast } from '../UndoToast/UndoToast'
 import { ProjectFilter as ProjectFilterComponent } from '../ProjectFilter/ProjectFilter.tsx'
 import { WeeklyReport } from '../WeeklyReport/WeeklyReport'
 import { Settings } from '../Settings/Settings'
+import { TimeSessionModal } from '../TimeSessionModal/TimeSessionModal'
 
 type Tab = 'todo' | 'report' | 'settings'
 
@@ -27,6 +28,7 @@ export const TodoApp = () => {
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false)
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false)
   const [syncVersion, setSyncVersion] = useState(0)
+  const [detailTaskId, setDetailTaskId] = useState<string | null>(null)
   const langMenuRef = useRef<HTMLDivElement | null>(null)
   const themeMenuRef = useRef<HTMLDivElement | null>(null)
   const { t, i18n } = useTranslation()
@@ -172,6 +174,19 @@ export const TodoApp = () => {
     setIsThemeMenuOpen(false)
   }
 
+  const detailTask = todos.find((todo) => todo.id === detailTaskId)
+
+  if (detailTaskId !== null && detailTask) {
+    return (
+      <TimeSessionModal
+        taskId={detailTask.id}
+        taskTitle={detailTask.project ? `${detailTask.project}: ${detailTask.task}` : detailTask.task}
+        onBack={() => setDetailTaskId(null)}
+        syncVersion={syncVersion}
+      />
+    )
+  }
+
   return (
     <div className={styles.app} data-sync-version={syncVersion}>
       <header className={styles.header}>
@@ -253,7 +268,6 @@ export const TodoApp = () => {
           <>
             <TodoInput onAdd={handleAddTodo} />
             <ProjectFilterComponent
-              todos={todos}
               selectedFilter={selectedFilter}
               onFilterChange={setSelectedFilter}
             />
@@ -263,8 +277,8 @@ export const TodoApp = () => {
               onToggleComplete={handleToggleComplete}
               onDelete={handleDelete}
               onUpdateTask={handleUpdateTask}
+              onOpenTimeSession={setDetailTaskId}
               onReorder={handleReorder}
-              onClearCompleted={handleClearCompleted}
               syncVersion={syncVersion}
             />
             <UndoToast deletedStack={deletedStack} onUndo={undoDelete} onClose={dismissDelete} />

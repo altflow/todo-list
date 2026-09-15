@@ -1,31 +1,33 @@
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  z-index: 1000;
-}
-
-.modal {
-  width: min(760px, 100%);
-  max-height: 90vh;
-  overflow: auto;
-  background: var(--background-color, #fff);
-  color: var(--text-color, #222);
-  border-radius: 12px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+.page {
+  min-height: 100vh;
+  background: var(--color-bg, #fff);
+  color: var(--color-text-primary, #222);
 }
 
 .header {
+  position: sticky;
+  top: 0;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  padding: 1rem max(1rem, calc((100% - 760px) / 2));
+  background: var(--color-bg, #fff);
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  z-index: 1;
+}
+
+.backButton {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.5rem;
+  color: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.headerTitle {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
 }
 
 .title {
@@ -45,7 +47,9 @@
 }
 
 .content {
-  padding: 1.5rem;
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2rem;
   display: grid;
   gap: 1.5rem;
 }
@@ -158,23 +162,34 @@
   font-weight: 600;
 }
 
-.fieldGroup input,
-.note,
-.fieldGroup textarea {
+.fieldGroup input {
   width: 100%;
   padding: 0.65rem 0.75rem;
-  border: 1px solid var(--border-color, #d1d5db);
+  border: 1px solid var(--color-border, #d1d5db);
   border-radius: 6px;
-  background: var(--background-color, #fff);
+  background: var(--color-bg, #fff);
   color: inherit;
   box-sizing: border-box;
 }
 
-.note,
-.fieldGroup textarea {
-  resize: vertical;
-  min-height: 4rem;
-  max-height: 12rem;
+.noteTextarea {
+  resize: none;
+  overflow: hidden;
+  min-height: 1.5rem;
+  border: none;
+  border-bottom: 1px solid var(--color-border, #d1d5db);
+  background: transparent;
+  width: 100%;
+  padding: 0.25rem 0;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  line-height: 1.5;
+}
+
+.noteTextarea:focus {
+  outline: none;
+  border-bottom-color: var(--color-primary, #2563eb);
 }
 
 .inlineError,
