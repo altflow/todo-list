@@ -6,6 +6,7 @@ import { exportAllData, importAllData, type ConflictStrategy } from '../../utils
 import { copyToClipboard, downloadMarkdown, generateProjectMarkdown } from '../../utils/exportMarkdown'
 import { GoogleDriveProvider } from '../../sync/providers/GoogleDriveProvider'
 import { syncToDrive } from '../../sync/syncManager'
+import { useTheme, type Theme } from '../../hooks/useTheme'
 import styles from './Settings.module.css'
 
 export interface SettingsProps {
@@ -37,6 +38,7 @@ export const getImportConfirmMessage = (t: (key: string) => string, conflictStra
 
 export const Settings = ({ onClearAllCompleted, syncVersion = 0 }: SettingsProps) => {
   const { t } = useTranslation()
+  const { theme, setTheme } = useTheme()
   const isGoogleDriveAvailable = !!import.meta.env.VITE_GOOGLE_CLIENT_ID
   const [selectedProject, setSelectedProject] = useState('')
   const [startDate, setStartDate] = useState(getFirstDayOfCurrentMonth())
@@ -206,6 +208,24 @@ export const Settings = ({ onClearAllCompleted, syncVersion = 0 }: SettingsProps
 
   return (
     <section className={styles.settings}>
+      <section className={styles.themeSection}>
+        <h2 className={styles.heading}>Theme</h2>
+        <div className={styles.radioGroup}>
+          {(['light', 'dark', 'auto'] as Theme[]).map((option) => (
+            <label key={option} className={styles.radioOption}>
+              <input
+                type="radio"
+                name="theme"
+                value={option}
+                checked={theme === option}
+                onChange={() => setTheme(option)}
+              />
+              <span>{option === 'light' ? 'Light' : option === 'dark' ? 'Dark' : 'Auto'}</span>
+            </label>
+          ))}
+        </div>
+      </section>
+
       <section className={styles.syncSection}>
         <h2 className={styles.heading}>{t('cloudSync.title')}</h2>
 

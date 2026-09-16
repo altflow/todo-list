@@ -5,7 +5,6 @@ import { useTodos } from '../../hooks/useTodos'
 import { GoogleDriveProvider } from '../../sync/providers/GoogleDriveProvider'
 import { syncToDrive, syncFromDrive } from '../../sync/syncManager'
 import debounce from 'lodash/debounce'
-import { useTheme, type Theme } from '../../hooks/useTheme'
 import styles from './TodoApp.module.css'
 import { TodoInput } from '../TodoInput/TodoInput.tsx'
 import { TodoList } from '../TodoList/TodoList'
@@ -26,13 +25,10 @@ export const TodoApp = () => {
   const [activeTab, setActiveTab] = useState<Tab>('todo')
   const [selectedFilter, setSelectedFilter] = useState<ProjectFilter>('all')
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false)
-  const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false)
   const [syncVersion, setSyncVersion] = useState(0)
   const [detailTaskId, setDetailTaskId] = useState<string | null>(null)
   const langMenuRef = useRef<HTMLDivElement | null>(null)
-  const themeMenuRef = useRef<HTMLDivElement | null>(null)
   const { t, i18n } = useTranslation()
-  const { theme, setTheme } = useTheme()
   const {
     todos,
     deletedStack,
@@ -144,7 +140,7 @@ export const TodoApp = () => {
   }
 
   useEffect(() => {
-    if (!isLangMenuOpen && !isThemeMenuOpen) {
+    if (!isLangMenuOpen) {
       return undefined
     }
 
@@ -153,25 +149,17 @@ export const TodoApp = () => {
         setIsLangMenuOpen(false)
       }
 
-      if (themeMenuRef.current && !themeMenuRef.current.contains(event.target as Node)) {
-        setIsThemeMenuOpen(false)
-      }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isLangMenuOpen, isThemeMenuOpen])
+  }, [isLangMenuOpen])
 
   const handleLanguageSelect = (code: string) => {
     i18n.changeLanguage(code)
     setIsLangMenuOpen(false)
-  }
-
-  const handleThemeSelect = (selectedTheme: Theme) => {
-    setTheme(selectedTheme)
-    setIsThemeMenuOpen(false)
   }
 
   const detailTask = todos.find((todo) => todo.id === detailTaskId)
@@ -190,33 +178,32 @@ export const TodoApp = () => {
   return (
     <div className={styles.app} data-sync-version={syncVersion}>
       <header className={styles.header}>
-        <h1>{t('app.title')}</h1>
         <nav className={styles.nav}>
           <button
             type="button"
             onClick={() => setActiveTab('todo')}
-            className={activeTab === 'todo' ? styles.active : undefined}
+            className={`${styles.navItem} ${activeTab === 'todo' ? styles.active : ''}`}
           >
             {t('tabs.todo')}
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('report')}
-            className={activeTab === 'report' ? styles.active : undefined}
+            className={`${styles.navItem} ${activeTab === 'report' ? styles.active : ''}`}
           >
             {t('tabs.report')}
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('settings')}
-            className={activeTab === 'settings' ? styles.active : undefined}
+            className={`${styles.navItem} ${activeTab === 'settings' ? styles.active : ''}`}
           >
             {t('settings.title')}
           </button>
           <div className={styles.languageMenu} ref={langMenuRef}>
             <button
               type="button"
-              className={styles.languageTrigger}
+              className={`${styles.navItem} ${styles.languageTrigger}`}
               onClick={() => setIsLangMenuOpen((prev) => !prev)}
             >
               Language
@@ -232,30 +219,6 @@ export const TodoApp = () => {
                   >
                     {i18n.language === language.code ? '✓ ' : ''}
                     {language.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className={styles.themeMenu} ref={themeMenuRef}>
-            <button
-              type="button"
-              className={styles.themeTrigger}
-              onClick={() => setIsThemeMenuOpen((prev) => !prev)}
-            >
-              Theme
-            </button>
-            {isThemeMenuOpen && (
-              <div className={styles.themeDropdown}>
-                {(['light', 'dark', 'auto'] as Theme[]).map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    className={styles.themeOption}
-                    onClick={() => handleThemeSelect(option)}
-                  >
-                    {theme === option ? '✓ ' : ''}
-                    {option === 'light' ? 'Light' : option === 'dark' ? 'Dark' : 'Auto'}
                   </button>
                 ))}
               </div>

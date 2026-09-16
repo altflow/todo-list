@@ -11,7 +11,8 @@
 .dataSection,
 .exportSection,
 .backupSection,
-.restoreSection {
+.restoreSection,
+.themeSection {
   display: flex;
   flex-direction: column;
   gap: 12px;
