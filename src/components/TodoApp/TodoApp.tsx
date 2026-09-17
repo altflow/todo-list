@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useMemo } from 'react'
 import type { ProjectFilter } from '../../types/todo'
 import { useTranslation } from 'react-i18next'
 import { useTodos } from '../../hooks/useTodos'
+import { useTheme } from '../../hooks/useTheme'
 import { GoogleDriveProvider } from '../../sync/providers/GoogleDriveProvider'
 import { syncToDrive, syncFromDrive } from '../../sync/syncManager'
 import debounce from 'lodash/debounce'
@@ -29,6 +30,7 @@ export const TodoApp = () => {
   const [detailTaskId, setDetailTaskId] = useState<string | null>(null)
   const langMenuRef = useRef<HTMLDivElement | null>(null)
   const { t, i18n } = useTranslation()
+  useTheme()
   const {
     todos,
     deletedStack,
