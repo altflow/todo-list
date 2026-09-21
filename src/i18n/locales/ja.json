@@ -13,6 +13,8 @@
   "todoItem": {
     "editButton": "編集",
     "deleteButton": "削除",
+    "timeSessionButton": "作業時間を記録",
+    "actionsMenuButton": "操作メニュー",
     "saveButton": "保存",
     "cancelButton": "キャンセル"
   },

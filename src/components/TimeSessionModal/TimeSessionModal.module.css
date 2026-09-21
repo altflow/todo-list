@@ -134,6 +134,32 @@
   color: white;
 }
 
+.buttonIcon {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .editButton,
+  .deleteButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+  }
+
+  .buttonLabel {
+    display: none;
+  }
+
+  .buttonIcon {
+    display: inline;
+    font-size: 1.15rem;
+    line-height: 1;
+  }
+}
+
 .form,
 .inlineForm {
   display: grid;

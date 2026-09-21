@@ -1,17 +1,29 @@
 .todoItem {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px;
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  margin-bottom: 8px;
+  min-height: 44px;
+}
+
+.todoItem:not(:last-child) {
+  border-bottom: 1px solid var(--color-border);
 }
 
 .checkbox {
   cursor: pointer;
   width: 18px;
   height: 18px;
+}
+
+.checkboxTarget {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 20px;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
 }
 
 .task {
@@ -32,12 +44,9 @@
   font-size: 14px;
 }
 
-.editBtn,
-.deleteBtn,
 .saveBtn,
-.cancelBtn,
-.dragHandle,
-.timeSessionBtn {
+.cancelBtn {
+  min-height: 44px;
   padding: 4px 8px;
   border: 1px solid var(--color-border-strong);
   border-radius: 4px;
@@ -49,11 +58,23 @@
 }
 
 .dragHandle {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 32px;
+  touch-action: none;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
   color: var(--color-text-primary);
+}
+
+.dragHandle::before,
+.checkboxTarget::before {
+  content: '';
+  position: absolute;
+  inset: -12px;
 }
 
 .timeBadge {
@@ -67,20 +88,10 @@
   white-space: nowrap;
 }
 
-.timeSessionBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-}
-
-.dragHandle:hover,
-.timeSessionBtn:hover {
+.dragHandle:hover {
   background: var(--color-bg-tertiary);
 }
 
-.editBtn:hover,
-.deleteBtn:hover,
 .saveBtn:hover,
 .cancelBtn:hover {
   background: var(--color-bg-tertiary);

@@ -4,6 +4,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { useTranslation } from 'react-i18next'
 import type { Todo } from '../../types/todo'
 import { useTimeSessions, formatDuration } from '../../hooks/useTimeSessions'
+import { TaskItemActions } from '../TaskItemActions/TaskItemActions'
 import styles from './TodoItem.module.css'
 
 interface TodoItemProps {
@@ -24,7 +25,6 @@ function DraggableTodoItem({
   displayTask,
   syncVersion,
 }: TodoItemProps & { displayTask: string; onEdit: () => void }) {
-  const { t } = useTranslation()
   const { totalMinutes } = useTimeSessions(todo.id, syncVersion)
   const {
     attributes,
@@ -51,32 +51,25 @@ function DraggableTodoItem({
       >
         ⠿
       </button>
-      <input
-        type="checkbox"
-        checked={todo.completed}
-        onChange={() => onToggleComplete(todo.id)}
-        className={styles.checkbox}
-      />
+      <label className={styles.checkboxTarget}>
+        <input
+          type="checkbox"
+          checked={todo.completed}
+          onChange={() => onToggleComplete(todo.id)}
+          className={styles.checkbox}
+        />
+      </label>
       <span className={todo.completed ? styles.completedTask : styles.task}>
         {displayTask}
       </span>
       {totalMinutes > 0 ? (
         <span className={styles.timeBadge}>{formatDuration(totalMinutes)}</span>
       ) : null}
-      <button
-        type="button"
-        className={styles.timeSessionBtn}
-        aria-label="作業時間を記録"
-        onClick={() => onOpenTimeSession(todo.id)}
-      >
-        ⏱
-      </button>
-      <button onClick={onEdit} className={styles.editBtn}>
-        {t('todoItem.editButton')}
-      </button>
-      <button onClick={() => onDelete(todo.id)} className={styles.deleteBtn}>
-        {t('todoItem.deleteButton')}
-      </button>
+      <TaskItemActions
+        onEdit={onEdit}
+        onDelete={() => onDelete(todo.id)}
+        onOpenTimeSession={() => onOpenTimeSession(todo.id)}
+      />
     </div>
   )
 }
@@ -147,30 +140,23 @@ export function TodoItem({
   if (todo.completed) {
     return (
       <div className={styles.todoItem}>
-        <input
-          type="checkbox"
-          checked={todo.completed}
-          onChange={() => onToggleComplete(todo.id)}
-          className={styles.checkbox}
-        />
+        <label className={styles.checkboxTarget}>
+          <input
+            type="checkbox"
+            checked={todo.completed}
+            onChange={() => onToggleComplete(todo.id)}
+            className={styles.checkbox}
+          />
+        </label>
         <span className={styles.completedTask}>{displayTask}</span>
         {totalMinutes > 0 ? (
           <span className={styles.timeBadge}>{formatDuration(totalMinutes)}</span>
         ) : null}
-        <button
-          type="button"
-          className={styles.timeSessionBtn}
-          aria-label="作業時間を記録"
-          onClick={() => onOpenTimeSession(todo.id)}
-        >
-          ⏱
-        </button>
-        <button onClick={handleEdit} className={styles.editBtn}>
-          {t('todoItem.editButton')}
-        </button>
-        <button onClick={() => onDelete(todo.id)} className={styles.deleteBtn}>
-          {t('todoItem.deleteButton')}
-        </button>
+        <TaskItemActions
+          onEdit={handleEdit}
+          onDelete={() => onDelete(todo.id)}
+          onOpenTimeSession={() => onOpenTimeSession(todo.id)}
+        />
       </div>
     )
   }

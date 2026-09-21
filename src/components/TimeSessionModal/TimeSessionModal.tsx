@@ -110,7 +110,7 @@ export const TimeSessionModal = ({ taskId, taskTitle, onBack, syncVersion = 0 }:
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <button type="button" className={styles.backButton} onClick={onBack} aria-label={timeSessionsT('back')}>
+          <button type="button" className={styles.backButton} onClick={onBack} aria-label={timeSessionsT('back')}>
           &lt;
         </button>
         <div className={styles.headerTitle}>
@@ -208,16 +208,20 @@ export const TimeSessionModal = ({ taskId, taskTitle, onBack, syncVersion = 0 }:
                               <button
                                 type="button"
                                 className={styles.editButton}
+                                aria-label={timeSessionsT('edit')}
                                 onClick={() => session.id !== undefined && handleEditStart(session)}
                               >
-                                {timeSessionsT('edit')}
+                                <span className={styles.buttonLabel}>{timeSessionsT('edit')}</span>
+                                <span className={styles.buttonIcon} aria-hidden="true">✎</span>
                               </button>
                               <button
                                 type="button"
                                 className={styles.deleteButton}
+                                aria-label={timeSessionsT('delete')}
                                 onClick={() => session.id !== undefined && void deleteSession(session.id)}
                               >
-                                {timeSessionsT('delete')}
+                                <span className={styles.buttonLabel}>{timeSessionsT('delete')}</span>
+                                <span className={styles.buttonIcon} aria-hidden="true">🗑</span>
                               </button>
                             </div>
                           </div>

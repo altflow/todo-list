@@ -13,6 +13,8 @@
   "todoItem": {
     "editButton": "Edit",
     "deleteButton": "Delete",
+    "timeSessionButton": "Log work time",
+    "actionsMenuButton": "Task actions",
     "saveButton": "Save",
     "cancelButton": "Cancel"
   },
