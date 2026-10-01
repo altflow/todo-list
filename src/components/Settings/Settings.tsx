@@ -325,26 +325,30 @@ export const Settings = ({ onClearAllCompleted, syncVersion = 0 }: SettingsProps
           <label className={styles.label} htmlFor="export-start-date">
             {t('export.startDate')}
           </label>
-          <input
-            id="export-start-date"
-            className={styles.input}
-            type="date"
-            value={startDate}
-            onChange={(event) => setStartDate(event.target.value)}
-          />
+          <div className={styles.dateInputWrapper}>
+            <input
+              id="export-start-date"
+              className={styles.input}
+              type="date"
+              value={startDate}
+              onChange={(event) => setStartDate(event.target.value)}
+            />
+          </div>
         </div>
 
         <div className={styles.fieldGroup}>
           <label className={styles.label} htmlFor="export-end-date">
             {t('export.endDate')}
           </label>
-          <input
-            id="export-end-date"
-            className={styles.input}
-            type="date"
-            value={endDate}
-            onChange={(event) => setEndDate(event.target.value)}
-          />
+          <div className={styles.dateInputWrapper}>
+            <input
+              id="export-end-date"
+              className={styles.input}
+              type="date"
+              value={endDate}
+              onChange={(event) => setEndDate(event.target.value)}
+            />
+          </div>
         </div>
 
         <div className={styles.buttonRow}>

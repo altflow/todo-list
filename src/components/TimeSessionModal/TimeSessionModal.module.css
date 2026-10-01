@@ -201,6 +201,26 @@
   box-sizing: border-box;
 }
 
+.dateInputWrapper {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-border, #d1d5db);
+  border-radius: 6px;
+  background: var(--color-bg, #fff);
+}
+
+.dateInputWrapper input[type='datetime-local'] {
+  display: inline-flex;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+
 .noteTextarea {
   resize: none;
   overflow: hidden;

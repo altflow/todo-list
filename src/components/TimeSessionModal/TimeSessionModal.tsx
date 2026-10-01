@@ -139,33 +139,37 @@ export const TimeSessionModal = ({ taskId, taskTitle, onBack, syncVersion = 0 }:
                                 <label className={styles.label} htmlFor={`edit-started-${session.id}`}>
                                   {timeSessionsT('start')}
                                 </label>
-                                <input
-                                  id={`edit-started-${session.id}`}
-                                  type="datetime-local"
-                                  value={editStartedAt}
-                                  onChange={(event) => {
-                                    setEditStartedAt(event.target.value)
-                                    if (editError) {
-                                      setEditError('')
-                                    }
-                                  }}
-                                />
+                                <div className={styles.dateInputWrapper}>
+                                  <input
+                                    id={`edit-started-${session.id}`}
+                                    type="datetime-local"
+                                    value={editStartedAt}
+                                    onChange={(event) => {
+                                      setEditStartedAt(event.target.value)
+                                      if (editError) {
+                                        setEditError('')
+                                      }
+                                    }}
+                                  />
+                                </div>
                               </div>
                               <div className={styles.fieldGroup}>
                                 <label className={styles.label} htmlFor={`edit-ended-${session.id}`}>
                                   {timeSessionsT('end')}
                                 </label>
-                                <input
-                                  id={`edit-ended-${session.id}`}
-                                  type="datetime-local"
-                                  value={editEndedAt}
-                                  onChange={(event) => {
-                                    setEditEndedAt(event.target.value)
-                                    if (editError) {
-                                      setEditError('')
-                                    }
-                                  }}
-                                />
+                                <div className={styles.dateInputWrapper}>
+                                  <input
+                                    id={`edit-ended-${session.id}`}
+                                    type="datetime-local"
+                                    value={editEndedAt}
+                                    onChange={(event) => {
+                                      setEditEndedAt(event.target.value)
+                                      if (editError) {
+                                        setEditError('')
+                                      }
+                                    }}
+                                  />
+                                </div>
                               </div>
                             </div>
                             {editError ? <p className={styles.inlineError}>{editError}</p> : null}
@@ -242,34 +246,38 @@ export const TimeSessionModal = ({ taskId, taskTitle, onBack, syncVersion = 0 }:
                   <label className={styles.label} htmlFor="startedAt">
                     {timeSessionsT('start')}
                   </label>
-                  <input
-                    id="startedAt"
-                    type="datetime-local"
-                    value={startedAt}
-                    onChange={(event) => {
-                      setStartedAt(event.target.value)
-                      if (error) {
-                        setError('')
-                      }
-                    }}
-                  />
+                  <div className={styles.dateInputWrapper}>
+                    <input
+                      id="startedAt"
+                      type="datetime-local"
+                      value={startedAt}
+                      onChange={(event) => {
+                        setStartedAt(event.target.value)
+                        if (error) {
+                          setError('')
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
 
                 <div className={styles.fieldGroup}>
                   <label className={styles.label} htmlFor="endedAt">
                     {timeSessionsT('end')}
                   </label>
-                  <input
-                    id="endedAt"
-                    type="datetime-local"
-                    value={endedAt}
-                    onChange={(event) => {
-                      setEndedAt(event.target.value)
-                      if (error) {
-                        setError('')
-                      }
-                    }}
-                  />
+                  <div className={styles.dateInputWrapper}>
+                    <input
+                      id="endedAt"
+                      type="datetime-local"
+                      value={endedAt}
+                      onChange={(event) => {
+                        setEndedAt(event.target.value)
+                        if (error) {
+                          setError('')
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
               {error ? <p className={styles.inlineError}>{error}</p> : null}
