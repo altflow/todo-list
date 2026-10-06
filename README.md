@@ -30,7 +30,7 @@ A personal productivity app for task management and time tracking, built with mo
 
 ## Live Demo
 
-[https://altflow.github.io/todo-list/](https://altflow.github.io/todo-list/)
+[https://todo-list.altf.workers.dev](https://todo-list.altf.workers.dev)
 
 > Cloud sync is disabled in the public demo. To enable it, set up your own Google Client ID (see below).
 
